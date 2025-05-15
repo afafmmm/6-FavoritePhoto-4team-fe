@@ -3,6 +3,7 @@ import CardListPageEx from "@/components/FllterDropdown/CardListPageEx";
 import { Suspense } from "react"; //useSearchParams를 사용해서 Suspense로 감싸야 안전하게 CSR 처리가 됩니다.
 import Link from "next/link";
 import React from "react";
+import { Title } from "@/components/ui/Title";
 
 export default function HomePage() {
   const handleSellClick = () => alert("내 포토카드 판매하기 클릭");
