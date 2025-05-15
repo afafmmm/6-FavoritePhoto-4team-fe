@@ -10,6 +10,7 @@ const allCards = [
   { id: 3, name: '카드 C', grade: 'LEGENDARY' },
   { id: 4, name: '카드 D', grade: 'SUPER RARE' },
 ];
+//주석처리 지워용용
 
 export default function CardListPageEx() {
   // URL의 쿼리 파라미터를 가져오는 훅
