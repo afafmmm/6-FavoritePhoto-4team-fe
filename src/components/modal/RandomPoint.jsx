@@ -10,7 +10,9 @@ import { useState } from 'react'
 export default function RandomPoint() {
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [active, setActive] = useState(false);
+  const [point, setPoint] = useState(0)
   const [closed, setClosed] = useState(true)
+  
 
   const boxes = [
     { src: blueBox, alt: 'blue box' },
@@ -27,8 +29,9 @@ export default function RandomPoint() {
   }
 
   const handleBoxConfirm = () => {
-    
-  }
+    setActive(true);
+    setPoint(Math.floor(Math.random() * 10) + 1); // 1부터 10까지 랜덤 숫자
+  };
 
   if (!closed) return null
 
@@ -60,7 +63,7 @@ export default function RandomPoint() {
           <div className={`${!active && "hidden"}`}>
             <Image src={pointImg} alt='point.png' className='aspect-square max-w-60 md:max-w-[340px]'/>
             <div className='text-center text-700-24 md:text-700-28 lg:text-700-32'>
-                <span className='text-main'>2P</span> 획득!
+                <span className='text-main'>{point}P</span> 획득!
             </div>
           </div>
           <p className={`text-center font-bold lg:text-700-20 ${active && "hidden"}`}>
@@ -90,7 +93,7 @@ export default function RandomPoint() {
         </div>
 
         {selectedIndex !== null && (
-          <button onClick={() => setActive(true)} className={`w-full h-14 max-w-[440px] lg:max-w-[520px] flex items-center justify-center font-bold mt-6 text-my-black bg-main cursor-pointer lg:text-700-18 ${active && "hidden"}`}>
+          <button onClick={handleBoxConfirm} className={`w-full h-14 max-w-[440px] lg:max-w-[520px] flex items-center justify-center font-bold mt-6 text-my-black bg-main cursor-pointer lg:text-700-18 ${active && "hidden"}`}>
             선택완료
           </button>
         )}
