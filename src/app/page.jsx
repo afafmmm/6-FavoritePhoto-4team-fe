@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <div>
       HomePage
-       
+       <CardListPageEx/>
       <Link href="/signup">
         <div>Input컴포넌트 확인용 페이지 클릭
         </div>
