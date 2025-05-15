@@ -41,7 +41,6 @@ import Sort from "@/components/ui/Sort";
 import { useQuery } from "@tanstack/react-query";
 import { Title } from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
-import RandomPoint from "@/components/modal/RandomPoint";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -77,7 +76,6 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-      {/* <RandomPoint /> */}
       HomePage
       <Title
         title="마이페이지"
