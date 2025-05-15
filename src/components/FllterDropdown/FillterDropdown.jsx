@@ -9,11 +9,14 @@ const grades = ["전체", "COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
 
 export default function FillterDropdown() {
   const router = useRouter();
+    // 현재 경로 가져오기
   const pathname = usePathname();
+  // 쿼리스트링 읽기
   const searchParams = useSearchParams();
-
   const [isOpen, setIsOpen] = useState(false);
 
+
+ // 등급 클릭 시 쿼리스트링 변경 → 페이지 이동
   const handleSelect = (grade) => {
     const params = new URLSearchParams(searchParams);
     if (grade === "전체") {
@@ -29,7 +32,7 @@ export default function FillterDropdown() {
     <div className="relative inline-block">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-32"
+        className="flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-16"
       >
         {/* 모바일용 아이콘 (375px 이하) */}
         <div className="flex justify-center items-center w-full h-full md:hidden">

@@ -12,11 +12,11 @@ export default function RootLayout({ children }) {
     <html lang="ko">
       <body>
         <div className="flex flex-col min-h-full px-4 md:px-5 lg:px-0 max-w-full lg:max-w-[1480px] mx-auto">
-          {/* Header Component */}
+         
           <main className="flex-1">
             {children}
           </main>
-          {/* Footer Component */}
+          
         </div>
       </body>
     </html>
