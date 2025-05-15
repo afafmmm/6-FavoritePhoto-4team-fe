@@ -40,6 +40,7 @@ import React from "react";
 import Sort from "@/components/ui/Sort";
 import { useQuery } from "@tanstack/react-query";
 import { Title } from "@/components/ui/Title";
+import Button from "@/components/ui/Button";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -95,6 +96,33 @@ export default function HomePage() {
       {data?.map((data) => {
         return <div key={data.id}>{data.name}</div>;
       })}
+      {/* Button 컴포넌트 테스트 섹션 - Button.jsx에 정의된 type 사용 */}
+      <div className="mt-8 p-4 border-t border-gray-700">
+        <h2 className="text-xl text-white mb-4">
+          Button 컴포넌트 타입별 테스트
+        </h2>
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <Button type="purchase" />
+            <Button type="exchangeGreen" />
+            <Button type="approve" />
+
+            <Button type="purchase" disabled />
+            <Button type="exchangeGreen" disabled />
+            <Button type="approve" disabled />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <Button type="exchangeBlack" />
+            <Button type="reject" />
+            <Button type="sellDown" />
+
+            <Button type="exchangeBlack" disabled />
+            <Button type="reject" disabled />
+            <Button type="sellDown" disabled />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
