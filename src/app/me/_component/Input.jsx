@@ -11,7 +11,7 @@ export default function Input({
   error = "",
 }) {
   return (
-    <div className="w-full bg-transparent flex flex-col gap-2.5">
+    <div className="bg-transparent flex flex-col gap-2.5 w-full max-w-[345px] md:max-w-110 lg:max-w-130">
       <label className="text-700-16 lg:text-700-20">{label}</label>
       <input
         type="text"
@@ -21,7 +21,7 @@ export default function Input({
         onChange={onChange}
         className={clsx(
           isError ? "border-my-red" : "border-gray-200",
-          "border rounded-[2px] px-5 py-[18px] max-w-[345px] md:max-w-110 lg:max-w-130 placeholder:text-gray-200 placeholder:text-300-14 lg:placeholder:text-300-16 focus:outline-none text-400-14 lg:text-400-16"
+          "border rounded-[2px] px-5 py-[18px] w-full placeholder:text-gray-200 placeholder:text-300-14 lg:placeholder:text-300-16 focus:outline-none text-400-14 lg:text-400-16"
         )}
       />
       {isError && (

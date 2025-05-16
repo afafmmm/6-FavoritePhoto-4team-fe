@@ -1,10 +1,15 @@
 import React from "react";
 import Input from "./Input";
 import clsx from "clsx";
+import TextArea from "./TextArea";
+import { GenreSelect, GradeSelect } from "./Select";
 
 export default function PostAndUpdateForm() {
   return (
-    <section
+    <form
+      action="/api/me/post"
+      method="POST"
+      encType="multipart/form-data"
       className={clsx(
         // isError ? "gap-8" : "gap-10",
         "flex flex-col justify-center items-center"
@@ -16,12 +21,24 @@ export default function PostAndUpdateForm() {
         isError={true}
         error="한국어로 입력해 주세요."
       />
+      <GradeSelect />
+      <GenreSelect />
       <Input
-        label="포토카드 이름"
-        placeholder="포토카드 이름을 입력해 주세요"
+        label="가격"
+        placeholder="가격을 입력해 주세요"
         isError={false}
-        error="한국어로 입력해 주세요."
+        error="숫자로만 입력할 수 있습니다."
       />
-    </section>
+      <Input
+        label="총 발행량"
+        placeholder="총 발행량을 입력해 주세요"
+        isError={false}
+        error="총 발행량은 10장 이하로 선택 가능합니다."
+      />
+      <TextArea
+        label="포토카드 설명"
+        placeholdrer="카드 설명을 입력해 주세요"
+      />
+    </form>
   );
 }
