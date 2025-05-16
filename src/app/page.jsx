@@ -40,6 +40,7 @@ import React from "react";
 import Sort from "@/components/ui/Sort";
 import { useQuery } from "@tanstack/react-query";
 import { Title } from "@/components/ui/Title";
+import BottomSheet from "@/components/BottomSheet/BottomSheet";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -76,7 +77,8 @@ export default function HomePage() {
   return (
     <div className="w-full">
       HomePage
-      <Title
+<BottomSheet />
+      {/* <Title
         title="마이페이지"
         buttonText="수정하기"
         onButtonClick={() => console.log("수정")}
@@ -94,7 +96,7 @@ export default function HomePage() {
       <Sort onClick={(data) => setOrderBy(data)} />
       {data?.map((data) => {
         return <div key={data.id}>{data.name}</div>;
-      })}
+      })} */}
     </div>
   );
 }
