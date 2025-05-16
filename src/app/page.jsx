@@ -88,7 +88,7 @@ export default function HomePage() {
       <Suspense fallback={null}>
         <CardListPageEx />
       </Suspense>
-      <Link href="/signup">
+      <Link href="/test">
         <div>Input컴포넌트 확인용 페이지 클릭</div>
       </Link>
       배포 확인(배포에 문제가 있는 확인)
