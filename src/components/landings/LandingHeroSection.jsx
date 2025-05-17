@@ -15,7 +15,7 @@ export default function LadingHeroSection() {
             <Image src={ladingPcBgImg} alt="pc" className=" w-full min-h-[1100px] hidden px-14 lg:block"/>
             <div className="absolute bottom-0 h-full flex flex-col justify-evenly items-center">
                 <div className="flex flex-col gap-4  md:gap-10 items-center md:py-10 text-center">
-                    <Image src={mainLogoImg} alt="mainLogo"/>
+                    <Image src={mainLogoImg} alt="mainLogo" className="opacity-0 md:opacity-100"/>
                     <h2 className="text-700-20 md:text-700-40 ">구하기 어려웠던<br/><span className="text-main">나의 최애</span>가 여기에!</h2>
                     <Link
                     href="/home"
