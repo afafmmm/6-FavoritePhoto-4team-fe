@@ -13,8 +13,8 @@ export default function RandingPage() {
         <Header />
         <LadingHeroSection />
         <LadingPointTradeSection />
-        {/* <LandingNotificationFeatureSection />
-        <LandingRandomPointBoxSection /> */}
+        <LandingNotificationFeatureSection />
+        <LandingRandomPointBoxSection />
         <LadingCTASection />
       </div>
     </div>
