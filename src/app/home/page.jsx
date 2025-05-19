@@ -1,6 +1,5 @@
 import HomeFallback from "@/components/skeletons/HomeFallback";
 import BaseCard from "@/components/ui/BaseCard";
-// import example from "@/assets/example.svg";
 import { delay } from "@/delay"
 import { Suspense } from "react";
 
