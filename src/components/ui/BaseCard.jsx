@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import favicon from "@/assets/favicon.svg";
+import example from "@/assets/example.svg";
 import GradeTag from "../tag/GradeTag";
 
 export default function BaseCard({
@@ -47,10 +48,10 @@ export default function BaseCard({
   };
 
   return (
-    <div className="bg-my-black text-white lg:w-[360px] md:w-[262px] lg:px-8 lg:py-7 md:px-4 md:py-3.5 rounded-sm border border-gray-800">
+    <div className="bg-my-black text-white  lg:px-8 lg:py-7 md:px-4 md:py-3.5 rounded-sm border border-gray-800">
       {/* 이미지 */}
       <div className="w-full lg:h-[210px] md:h-[170px] relative mb-4">
-        <Image src={image} alt={title} fill className="object-cover" />
+        <Image src={example} alt={title} fill className="object-cover" />
       </div>
 
       {/* 제목 */}
