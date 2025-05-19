@@ -1,9 +1,10 @@
-"use client";
 
 import React from "react";
 import Image from "next/image";
 import favicon from "@/assets/favicon.svg";
 import GradeTag from "../tag/GradeTag";
+import example from "@/assets/example.svg";
+
 
 export default function BaseCard({
   title,
@@ -48,7 +49,7 @@ export default function BaseCard({
       {/* 이미지 */}
       <div className="w-full aspect-[4/3] relative mb-3">
         <Image
-          src={image}
+          src={example}
           alt={title}
           fill
           className="object-cover rounded-sm"
@@ -56,12 +57,12 @@ export default function BaseCard({
       </div>
 
       {/* 제목 */}
-      <h3 className="text-[14px] md:text-lg font-bold truncate mb-1">
+      <h3 className="text-sm md:text-lg font-bold truncate mb-1">
         {title}
       </h3>
 
       {/* 등급, 카테고리, 작성자 */}
-      <div className="flex items-center text-[10px] gap-2">
+      <div className="flex items-center gap-2">
         <GradeTag grade={grade} size="xs" />
         <span className="text-gray-400">|</span>
         <span className="text-gray-300">{category}</span>
@@ -80,7 +81,7 @@ export default function BaseCard({
       <div className="border-t border-gray-700 my-2.5" />
 
       {/* 가격 */}
-      <div className="text-[10px] font-light space-y-1">
+      <div className="text-[10px]  font-light space-y-1">
         {price && !showPurchasePrice && (
           <div className="flex justify-between">
             <span className="text-gray-300">가격</span>
