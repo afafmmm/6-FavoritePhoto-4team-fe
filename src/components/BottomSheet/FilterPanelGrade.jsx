@@ -1,25 +1,23 @@
-const options = [
-  { label: 'COMMON', count: 52, color: 'text-yellow-300' },
-  { label: 'RARE', count: 16, color: 'text-blue-400' },
-  { label: 'SUPER RARE', count: 5, color: 'text-purple-400' },
-  { label: 'LEGENDARY', count: 3, color: 'text-red-500' },
-];
+const gradeOptions = ["COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
 
-export default function FilterPanelGrade({ filter, setFilter }) {
+export default function FilterPanelGrade({ grades = {}, selectedGrade, onSelectGrade }) {
   return (
     <ul>
-      {options.map((item) => (
-        <li
-          key={item.label}
-          className={`flex justify-between py-2 cursor-pointer ${
-            filter.grade === item.label ? 'bg-gray-800' : ''
-          }`}
-          onClick={() => setFilter((prev) => ({ ...prev, grade: item.label }))}
-        >
-          <span className={item.color}>{item.label}</span>
-          <span>{item.count}개</span>
-        </li>
-      ))}
+      {gradeOptions.map((grade) => {
+        const count = grades[grade] || 0;
+        return (
+          <li
+            key={grade}
+            className={`flex justify-between py-2 cursor-pointer ${
+              selectedGrade === grade ? "bg-gray-800" : ""
+            }`}
+            onClick={() => onSelectGrade(grade)}
+          >
+            <span>{grade}</span>
+            <span>{count}개</span>
+          </li>
+        );
+      })}
     </ul>
   );
 }
