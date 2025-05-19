@@ -55,7 +55,7 @@ export const Title = ({
       {buttonText && (
         <button
           onClick={onButtonClick}
-          className={`${buttonClass} w-[342px] h-[60px] text-700-16 md:w-[440px] md:h-[60px] md:text-700-18 px-4 py-2 rounded`}
+          className={`${buttonClass} w-[342px] h-[60px] text-700-16 md:w-[440px] md:h-[60px] md:text-700-18 px-4 py-2 rounded cursor-pointer `}
         >
           {buttonText}
         </button>
