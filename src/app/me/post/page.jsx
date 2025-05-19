@@ -1,6 +1,14 @@
+"use client";
+
 import React from "react";
-import PostAndUpdateForm from "../_component/PostAndUpdateForm";
+import PostForm from "./_component/PostForm";
+import PostTitle from "./_component/PostTitle";
 
 export default function CardPostPage() {
-  return <PostAndUpdateForm />;
+  return (
+    <>
+      <PostTitle />
+      <PostForm />
+    </>
+  );
 }

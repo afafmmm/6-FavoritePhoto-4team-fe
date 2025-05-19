@@ -7,7 +7,6 @@ export default function Input({
   placeholder = "",
   value,
   onChange,
-  isError = false,
   error = "",
 }) {
   return (
@@ -20,11 +19,11 @@ export default function Input({
         value={value}
         onChange={onChange}
         className={clsx(
-          isError ? "border-my-red" : "border-gray-200",
+          error ? "border-my-red" : "border-gray-200",
           "border rounded-[2px] px-5 py-[18px] w-full placeholder:text-gray-200 placeholder:text-300-14 lg:placeholder:text-300-16 focus:outline-none text-400-14 lg:text-400-16"
         )}
       />
-      {isError && (
+      {error && (
         <p className="text-my-red text-300-14 lg:text-300-16">{error}</p>
       )}
     </div>

@@ -21,7 +21,7 @@ export default function Sort({ onClick }) {
     <div ref={sortRef} className="w-[130px] md:w-[140px] lg:w-[180px]">
       <button
         onClick={toggle}
-        className="rounded-[2px] w-full h-[50px] border-1 px-[20px] mb-[5px] border-gray-200 flex justify-between items-center bg-my-black"
+        className="rounded-[2px] w-full h-[50px] border-1 px-[20px] mb-[5px] border-gray-200 flex justify-between items-center bg-my-black cursor-pointer"
       >
         <span className="text-400-12 md:text-400-14 lg:text-400-16">
           {order}

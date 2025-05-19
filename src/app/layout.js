@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className="w-full">
-        <div className="mx-auto min-h-screen px-4 md:px-5 lg:px-0 max-w-[1480px]">
+        <div className="mx-auto min-h-screen px-4 md:px-5 lg:px-0 max-w-[1480px] py-4 md:py-5">
           <Header />
           <main>
             <Providers>
