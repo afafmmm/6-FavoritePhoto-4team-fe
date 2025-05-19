@@ -7,8 +7,9 @@ import TextArea from "./TextArea";
 import Select from "./Select";
 import File from "./File";
 import Button from "@/components/ui/Button";
+import Sort from "@/components/ui/Sort";
 
-export default function PostForm() {
+export default function PostForm({ grades, genres }) {
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("");
   const [genre, setGenre] = useState("");
@@ -19,6 +20,7 @@ export default function PostForm() {
 
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
+  const [clicked, setClicked] = useState(false); // SelectBox 오류 처리 때문에 만듦 -- 클릭하면 즉시 상태 반영
 
   // 유효성 검사
   const validate = () => {
@@ -64,6 +66,7 @@ export default function PostForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setClicked(true); // 클릭했어! 오류 없애!
     const valid = validate();
     setIsValid(valid);
 
@@ -99,8 +102,20 @@ export default function PostForm() {
         onChange={(e) => setName(e.target.value)}
         error={errors.name}
       />
-      <Select type="등급" error={errors.grade} onChange={(e) => setGrade(e)} />
-      <Select type="장르" error={errors.genre} onChange={(e) => setGenre(e)} />
+      <Select
+        type="등급"
+        options={grades}
+        selected={grade}
+        error={clicked ? errors.grade : null}
+        onChange={(e) => setGrade(e)}
+      />
+      <Select
+        type="장르"
+        options={genres}
+        selected={genre}
+        error={clicked ? errors.genre : null}
+        onChange={(e) => setGenre(e)}
+      />
       <Input
         label="가격"
         name="price"

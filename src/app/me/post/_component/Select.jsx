@@ -6,10 +6,13 @@ import clsx from "clsx";
 import useDropdown from "@/hooks/useDrowdown";
 import ErrorText from "./ErrorText";
 
-export default function Select({ type, onChange, error }) {
-  const options = ["COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
+export default function Select({ type, options, onChange, error }) {
   const { isOpen, selected, dropdownRef, toggle, handleSelect } =
     useDropdown("");
+
+  const handleToggle = () => {
+    toggle();
+  };
 
   const handleOptionClick = (option) => {
     handleSelect(option);
@@ -27,13 +30,17 @@ export default function Select({ type, onChange, error }) {
 
       <button
         type="button"
-        onClick={toggle}
+        onClick={handleToggle}
         className={clsx(
           error ? "border-my-red" : "border-gray-200",
           "focus:outline-none border  rounded-[2px] px-5 py-[18px] w-full text-400-14 lg:text-400-16 cursor-pointer h-[55px] lg:h-15 relative flex justify-between items-center mb-2"
         )}
       >
-        <div className={clsx(isPlaceholder && "text-gray-200")}>
+        <div
+          className={clsx(
+            isPlaceholder && "text-gray-200 text-300-14 lg:text-300-16"
+          )}
+        >
           {isPlaceholder
             ? `${type}${type === "등급" ? "을" : "를"} 선택해 주세요`
             : selected}
@@ -52,11 +59,11 @@ export default function Select({ type, onChange, error }) {
         <div className="border border-gray-200 rounded-[2px] px-5 flex flex-col gap-5 h-[192px] justify-center text-400-14 lg:text-400-16">
           {options.map((opt) => (
             <div
-              key={opt}
-              onClick={() => handleOptionClick(opt)}
+              key={opt.id}
+              onClick={() => handleOptionClick(opt.name)}
               className="cursor-pointer"
             >
-              {opt}
+              {opt.name}
             </div>
           ))}
         </div>
