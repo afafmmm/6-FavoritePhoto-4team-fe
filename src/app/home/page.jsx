@@ -43,6 +43,7 @@ import { Title } from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
+import Pagination from "@/components/ui/Pagination";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -70,11 +71,18 @@ const sortMockData = (data, orderBy) => {
 
 export default function HomePage() {
   const [orderBy, setOrderBy] = useState("price_asc"); // state 추가
+  const [currentPage, setCurrentPage] = useState(1); // Pagination을 위한 현재 페이지 상태
+  const totalPages = 50; // Pagination을 위한 전체 페이지 수 (예시)
 
   const { data = [] } = useQuery({
     queryKey: ["cards", orderBy], // 조건에 order 넣고
     queryFn: () => sortMockData(mockdata, orderBy), // 함수 실행할 때도 조건 넣음
   });
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    console.log(`페이지가 ${page}로 변경되었습니다.`);
+  };
 
   return (
     <div className="w-full">
@@ -106,6 +114,8 @@ export default function HomePage() {
         <div className="flex flex-col space-y-4">
           <div className="flex flex-wrap items-center gap-4">
             <Button type="purchase" />
+            {/* 이름은 다르고 높이는 같은 다른버튼들은 높이에 맞는거 가져와서 사용 */}
+            <Button type="purchase">수정하기</Button>
             <Button type="exchangeGreen" />
             <Button type="approve" />
 
@@ -127,35 +137,50 @@ export default function HomePage() {
       </div>
       <div>
         <div>
-          <StatusTag type="sale" size="sm"/>
-          <StatusTag type="sale" size="md"/>
-          <StatusTag type="sale" size="lg"/>
+          <StatusTag type="sale" size="sm" />
+          <StatusTag type="sale" size="md" />
+          <StatusTag type="sale" size="lg" />
         </div>
         <div>
-          <StatusTag type="exchange" size="sm"/>
-          <StatusTag type="exchange" size="md"/>
-          <StatusTag type="exchange" size="lg"/>
+          <StatusTag type="exchange" size="sm" />
+          <StatusTag type="exchange" size="md" />
+          <StatusTag type="exchange" size="lg" />
         </div>
         <div>
-          <GradeTag grade="COMMON"  size="xs"/>
-          <GradeTag grade="COMMON" size="md"/>
-          <GradeTag grade="COMMON" size="lg"/>
-          <GradeTag grade="COMMON" size="xl"/>
+          <GradeTag grade="COMMON" size="xs" />
+          <GradeTag grade="COMMON" size="md" />
+          <GradeTag grade="COMMON" size="lg" />
+          <GradeTag grade="COMMON" size="xl" />
 
-          <GradeTag grade="RARE" size="xs"/>
-          <GradeTag grade="RARE" size="md"/>
-          <GradeTag grade="RARE" size="lg"/>
-          <GradeTag grade="RARE" size="xl"/>
+          <GradeTag grade="RARE" size="xs" />
+          <GradeTag grade="RARE" size="md" />
+          <GradeTag grade="RARE" size="lg" />
+          <GradeTag grade="RARE" size="xl" />
 
-          <GradeTag grade="SUPER RARE" size="xs"/>
-          <GradeTag grade="SUPER RARE" size="md"/>
-          <GradeTag grade="SUPER RARE" size="lg"/>
-          <GradeTag grade="SUPER RARE" size="xl"/>
+          <GradeTag grade="SUPER RARE" size="xs" />
+          <GradeTag grade="SUPER RARE" size="md" />
+          <GradeTag grade="SUPER RARE" size="lg" />
+          <GradeTag grade="SUPER RARE" size="xl" />
 
-          <GradeTag grade="LEGENDARY" size="xs"/>
-          <GradeTag grade="LEGENDARY" size="md"/>
-          <GradeTag grade="LEGENDARY" size="lg"/>
-          <GradeTag grade="LEGENDARY" size="xl"/>
+          <GradeTag grade="LEGENDARY" size="xs" />
+          <GradeTag grade="LEGENDARY" size="md" />
+          <GradeTag grade="LEGENDARY" size="lg" />
+          <GradeTag grade="LEGENDARY" size="xl" />
+        </div>
+      </div>
+      {/* Pagination 컴포넌트 테스트 섹션 */}
+      <div className="mt-8 p-4 border-t border-gray-700">
+        <h2 className="text-xl text-white mb-4">
+          Pagination 컴포넌트 (반응형)
+        </h2>
+
+        <div className="flex justify-center py-4">
+          {" "}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>
