@@ -5,8 +5,8 @@ import { Suspense } from "react";
 
 async function BaseCards() {
   await delay(2000); 
-  
-  const res = await fetch('http://localhost:3000/data/cards.json', {cache : "force-cache"});
+  // const res = await fetch('http://localhost:3000/data/cards.json', {cache : "force-cache"}); 로컬 환경
+  const res = await fetch('https://6-favorite-photo-4team-fe.vercel.app/data/cards.json', {cache : "force-cache"});
   if(!res.ok) {
     return null;
   }
