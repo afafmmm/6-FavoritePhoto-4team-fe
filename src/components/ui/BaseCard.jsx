@@ -1,9 +1,10 @@
-"use client";
 
 import React from "react";
 import Image from "next/image";
 import favicon from "@/assets/favicon.svg";
 import GradeTag from "../tag/GradeTag";
+import example from "@/assets/example.svg";
+
 
 export default function BaseCard({
   title,
