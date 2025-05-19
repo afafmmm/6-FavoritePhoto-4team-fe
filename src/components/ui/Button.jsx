@@ -61,7 +61,7 @@ const Button = ({
 
   const variantStyles = clsx({
     "bg-main text-my-black": variant === "primary" && !disabled,
-    "bg-gray-400 text-my-black": variant === "primary" && disabled,
+    "bg-gray-400 text-gray-300": variant === "primary" && disabled,
     "bg-my-black text-white border border-gray-100": variant === "secondary",
   });
 
@@ -108,7 +108,7 @@ const Button = ({
     sizeSpecificStyles,
     className,
     {
-      "cursor-not-allowed opacity-50": disabled,
+      "cursor-not-allowed": disabled,
       "cursor-pointer": !disabled,
     }
   );

@@ -34,7 +34,7 @@ const { data } = useQuery({
 "use client";
 import CardListPageEx from "@/components/FllterDropdown/CardListPageEx";
 import { Suspense, useState } from "react"; //useSearchParams를 사용해서 Suspense로 감싸야 안전하게 CSR 처리가 됩니다.
-
+import Profile from "@/components/ui/Profile";
 import Link from "next/link";
 import React from "react";
 import Sort from "@/components/ui/Sort";
@@ -43,7 +43,6 @@ import { Title } from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
-
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -157,6 +156,11 @@ export default function CommonPage() {
           <GradeTag grade="LEGENDARY" size="md" />
           <GradeTag grade="LEGENDARY" size="lg" />
           <GradeTag grade="LEGENDARY" size="xl" />
+        </div>
+        {/* Profile 컴포넌트 테스트 섹션 */}
+        <div className="mt-8 p-4 border-t border-gray-700">
+          <h2 className="text-xl text-white mb-4">Profile 컴포넌트 테스트</h2>
+          <Profile />
         </div>
       </div>
     </div>
