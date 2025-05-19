@@ -6,11 +6,17 @@ import FilterTab from "./FilterTab";
 import FilterPanelGrade from "./FilterPanelGrade";
 import FilterPanelGenre from "./FilterPanelGenre";
 import FilterPanelSale from "./FilterPanelSale";
-import { useFilterPhotosQuery } from "@/lib/api/api-bottomfilter";
+import { useFilterQuery } from "@/lib/api/api-bottomfilter";
 
 export default function BottomSheet({ onClose }) {
   const [selectedTab, setSelectedTab] = useState("grade");
-  const [filter, setFilter] = useState({ grade: null, genre: null, sale: null });
+  const [selectedGrades, setSelectedGrades] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [filter, setFilter] = useState({
+    grade: null,
+    genre: null,
+    sale: null,
+  });
   const [loading, setLoading] = useState(false);
   const [counts, setCounts] = useState({
     grade: {},
@@ -18,9 +24,9 @@ export default function BottomSheet({ onClose }) {
     sale: {},
   });
 
-  const { refetch } = useFilterPhotosQuery(filter);
+  const { refetch } = useFilterQuery(filter);
 
-// 전체 데이터에서 한 번만 카운트 계산하는 effect
+  // 전체 데이터에서 한 번만 카운트 계산하는
   useEffect(() => {
     async function fetchAllAndCount() {
       try {
@@ -50,7 +56,6 @@ export default function BottomSheet({ onClose }) {
         setLoading(true);
         const { data } = await refetch();
         // 필터된 사진 목록을 활용 (필요하면 상태로 관리)
-        // 예: setPhotos(data);
       } catch (err) {
         console.error("필터 사진 요청 실패:", err);
       } finally {
@@ -98,25 +103,26 @@ export default function BottomSheet({ onClose }) {
         {selectedTab === "grade" && (
           <FilterPanelGrade
             grades={counts.grade}
-            filter={filter}
-            selectedGrade={filter.grade}
-            onSelectGrade={(grade) => setFilter((prev) => ({ ...prev, grade }))}
+            selectedGrades={selectedGrades}
+            onSelectGrade={setSelectedGrades}
           />
         )}
 
         {selectedTab === "genre" && (
           <FilterPanelGenre
             counts={counts.genre}
-            filter={filter}
-            setFilter={(newFilter) => setFilter((prev) => ({ ...prev, genre: newFilter.genre }))}
+            selectedGenres={selectedGenres}
+            onSelectGenres={setSelectedGenres}
           />
         )}
 
         {selectedTab === "sale" && (
           <FilterPanelSale
-            sales={counts.sale} 
-            filter={filter}
-            setFilter={(newFilter) => setFilter((prev) => ({ ...prev, sale: newFilter.sale }))}
+            sales={counts.sale}
+            selectedSale={filter.sale}
+            onSelectSale={(saleKey) =>
+              setFilter((prev) => ({ ...prev, sale: saleKey }))
+            }
           />
         )}
       </div>
