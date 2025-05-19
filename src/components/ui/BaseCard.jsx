@@ -20,14 +20,12 @@ export default function BaseCard({
 }) {
   // '잔여'일 경우 스타일 분리
   const optionAmount = () => {
-    // 설명쓰는 카드 버전은 x
     if (!amount) return null;
 
-    // 잔여인 카드 버전
     if (amountLabel === "잔여" && amount.includes("/")) {
       const [remain, total] = amount.split("/").map((s) => s.trim());
       return (
-        <div className="flex justify-between">
+        <div className="flex justify-between text-[10px]">
           <span className="text-gray-300">{amountLabel}</span>
           <span className="font-medium">
             <span className="text-white">{remain}</span>
@@ -37,7 +35,6 @@ export default function BaseCard({
       );
     }
 
-    // 수량인 카드 버전
     return (
       <div className="flex justify-between">
         <span className="text-gray-300">{amountLabel}</span>
@@ -47,17 +44,24 @@ export default function BaseCard({
   };
 
   return (
-    <div className="bg-my-black text-white lg:w-[360px] md:w-[262px] lg:px-8 lg:py-7 md:px-4 md:py-3.5 rounded-sm border border-gray-800">
+    <div className="bg-my-black text-white w-full px-5 py-5 rounded-sm border border-gray-800">
       {/* 이미지 */}
-      <div className="w-full lg:h-[210px] md:h-[170px] relative mb-4">
-        <Image src={image} alt={title} fill className="object-cover" />
+      <div className="w-full aspect-[4/3] relative mb-3">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover rounded-sm"
+        />
       </div>
 
       {/* 제목 */}
-      <h3 className="md:text-lg md:font-bold truncate mb-2">{title}</h3>
+      <h3 className="text-[14px] md:text-lg font-bold truncate mb-1">
+        {title}
+      </h3>
 
       {/* 등급, 카테고리, 작성자 */}
-      <div className="flex items-center text-[14px] gap-2 mb-4">
+      <div className="flex items-center text-[10px] gap-2">
         <GradeTag grade={grade} size="xs" />
         <span className="text-gray-400">|</span>
         <span className="text-gray-300">{category}</span>
@@ -73,17 +77,16 @@ export default function BaseCard({
         {owner && <div className="ml-auto underline">{owner}</div>}
       </div>
 
-      <div className="border-t border-gray-700 my-3" />
+      <div className="border-t border-gray-700 my-2.5" />
 
       {/* 가격 */}
-      <div className="text-[14px] font-light space-y-1 mb-3">
+      <div className="text-[10px] font-light space-y-1">
         {price && !showPurchasePrice && (
           <div className="flex justify-between">
             <span className="text-gray-300">가격</span>
             <span className="font-medium">{price} P</span>
           </div>
         )}
-        {/* 수량 or 잔여 */}
         {optionAmount()}
       </div>
 
@@ -92,7 +95,7 @@ export default function BaseCard({
 
       {/* 로고 */}
       {isFavorite && (
-        <div className="flex justify-center mt-5 text-sm font-bold">
+        <div className="hidden md:flex justify-center mt-4">
           <Image src={favicon} alt="최애" width={80} height={80} />
         </div>
       )}
