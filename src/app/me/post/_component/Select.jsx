@@ -4,6 +4,7 @@ import React from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import clsx from "clsx";
 import useDropdown from "@/hooks/useDrowdown";
+import ErrorText from "./ErrorText";
 
 export default function Select({ type, onChange, error }) {
   const options = ["COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
@@ -20,7 +21,7 @@ export default function Select({ type, onChange, error }) {
   return (
     <div
       ref={dropdownRef}
-      className="bg-transparent flex flex-col gap-1 w-full max-w-[345px] md:max-w-110 lg:max-w-130"
+      className="bg-transparent flex flex-col gap-1 w-full"
     >
       <label className="text-700-16 lg:text-700-20 mb-2.5">{type}</label>
 
@@ -45,9 +46,7 @@ export default function Select({ type, onChange, error }) {
         />
       </button>
 
-      {error && (
-        <p className="text-my-red text-300-14 lg:text-300-16">{error}</p>
-      )}
+      <ErrorText error={error} />
 
       {isOpen && (
         <div className="border border-gray-200 rounded-[2px] px-5 flex flex-col gap-5 h-[192px] justify-center text-400-14 lg:text-400-16">

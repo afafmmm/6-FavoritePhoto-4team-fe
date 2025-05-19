@@ -5,7 +5,7 @@ export default function PostTitle() {
   const now = format(new Date(), "yyyy년 MM월");
 
   return (
-    <div className="border-b border-gray-100 pb-5 mb-15 mt-10 flex justify-between items-end">
+    <div className="border-b border-gray-100 pb-5 mb-15 mt-10 md:flex md:justify-between md:items-end hidden">
       <span className="title-48 lg:title-62">포토카드 생성</span>
       <span>
         <span className="mr-1 title-40 text-main">1</span>

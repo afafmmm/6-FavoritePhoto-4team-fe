@@ -2,8 +2,9 @@
 
 import clsx from "clsx";
 import React, { useRef, useState } from "react";
+import ErrorText from "./ErrorText";
 
-export default function File({ label, error }) {
+export default function File({ label, error, onChange }) {
   const fileRef = useRef();
 
   const [fileName, setFileName] = useState("사진 업로드");
@@ -13,8 +14,10 @@ export default function File({ label, error }) {
 
     if (file) {
       setFileName(file.name);
+      if (onChange) onChange(file); // 사진 넣었으면 file
     } else {
       setFileName("사진 업로드");
+      if (onChange) onChange(null); // 안 넣었으면 null
     }
   };
 
@@ -34,14 +37,12 @@ export default function File({ label, error }) {
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="cursor-pointer border border-main text-main w-[105px] md:w-[120px] h-full px-5 md:px-6 py-[18px] rounded-[2px] text-400-14 lg:text-400-16"
+          className="cursor-pointer border border-main text-main w-[105px] md:w-[120px] h-full px-5 md:px-6 py-[18px] rounded-[2px] text-400-14 lg:text-400-16 flex items-center justify-center"
         >
           파일 선택
         </button>
       </div>
-      {error && (
-        <p className="text-my-red text-300-14 lg:text-300-16">{error}</p>
-      )}
+      <ErrorText error={error} />
       {/* ↓ 숨김 */}
       <input
         type="file"
