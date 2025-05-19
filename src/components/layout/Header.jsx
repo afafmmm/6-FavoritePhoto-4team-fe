@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import CurtainMenu from "./CurtainMenu"; // Assuming CurtainMenu is in the same directory
+import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
 
 // 임시 로그인 상태 (실제 구현시 props/context/hook 등으로 대체 필요)
-const isLoggedIn = true; // true로 바꾸면 로그인 상태 테스트 가능
+const isLoggedIn = false; // true로 바꾸면 로그인 상태 테스트 가능
 const user = {
   point: 1540,
   nickname: "유디",
@@ -29,11 +29,13 @@ const Navbar = () => {
         </div>
         {/* 가운데: 로고 (sm에서는 가운데, md 이상에서는 왼쪽) */}
         <div className="flex items-center justify-center flex-1 md:justify-start md:flex-none">
-          <img
-            src="/img/logo.svg"
-            alt="최애의포토"
-            className="w-[83.37px] h-[15.12px] md:w-[111px] md:h-[20px] lg:w-[138.94px] lg:h-[25.2px]"
-          />
+          <a href="/">
+            <img
+              src="/img/logo.svg"
+              alt="최애의포토"
+              className="w-[83.37px] h-[15.12px] md:w-[111px] md:h-[20px] lg:w-[138.94px] lg:h-[25.2px]"
+            />
+          </a>
         </div>
         {/* 오른쪽: 알림 또는 로그인 (sm에서만 보임) */}
         <div className="flex items-center justify-end md:hidden">
@@ -99,7 +101,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <a href="/register" className="hover:text-gray-400">
+                <a href="/signup" className="hover:text-gray-400">
                   회원가입
                 </a>
               </li>
