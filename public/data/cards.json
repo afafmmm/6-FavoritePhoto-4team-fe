@@ -1,0 +1,167 @@
+[
+  {
+    "title": "우리집 뒷마당",
+    "image": "/images/example01.jpg",
+    "grade": "COMMON",
+    "category": "풍경",
+    "owner": "미쓰손",
+    "price": "4",
+    "amount": "2 / 5",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "도심 속 정원",
+    "image": "/images/example02.jpg",
+    "grade": "RARE",
+    "category": "도시",
+    "owner": "포카집",
+    "price": "7",
+    "amount": "1 / 3",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "달빛이 내리는 골목",
+    "image": "/images/example03.jpg",
+    "grade": "LEGENDARY",
+    "category": "야경",
+    "owner": "별바라기",
+    "price": "12",
+    "amount": "0 / 2",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "바닷가의 오후",
+    "image": "/images/example04.jpg",
+    "grade": "COMMON",
+    "category": "바다",
+    "owner": "썬라이즈",
+    "price": "5",
+    "amount": "3 / 5",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "고요한 숲길",
+    "image": "/images/example05.jpg",
+    "grade": "COMMON",
+    "category": "자연",
+    "owner": "초록정원",
+    "price": "3",
+    "amount": "4 / 5",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "가을 하늘",
+    "image": "/images/example06.jpg",
+    "grade": "RARE",
+    "category": "풍경",
+    "owner": "미드가을",
+    "price": "6",
+    "amount": "2 / 4",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "눈 내리는 거리",
+    "image": "/images/example07.jpg",
+    "grade": "RARE",
+    "category": "겨울",
+    "owner": "스노우맨",
+    "price": "15",
+    "amount": "1 / 1",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "해변의 소녀",
+    "image": "/images/example08.jpg",
+    "grade": "COMMON",
+    "category": "인물",
+    "owner": "마린걸",
+    "price": "4",
+    "amount": "2 / 3",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "밤하늘의 별",
+    "image": "/images/example09.jpg",
+    "grade": "RARE",
+    "category": "우주",
+    "owner": "스타러버",
+    "price": "8",
+    "amount": "0 / 2",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "고양이의 하루",
+    "image": "/images/example10.jpg",
+    "grade": "SUPER RARE",
+    "category": "동물",
+    "owner": "냥이수집가",
+    "price": "2",
+    "amount": "5 / 5",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "붉은 노을",
+    "image": "/images/example11.jpg",
+    "grade": "SUPER RARE",
+    "category": "풍경",
+    "owner": "노을빛",
+    "price": "9",
+    "amount": "1 / 3",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "비 오는 창가",
+    "image": "/images/example12.jpg",
+    "grade": "COMMON",
+    "category": "감성",
+    "owner": "레인드롭",
+    "price": "3",
+    "amount": "2 / 4",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "오로라의 밤",
+    "image": "/images/example13.jpg",
+    "grade": "EPIC",
+    "category": "자연",
+    "owner": "노던라이트",
+    "price": "18",
+    "amount": "1 / 1",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  },
+  {
+    "title": "한강의 봄",
+    "image": "/images/example14.jpg",
+    "grade": "COMMON",
+    "category": "도시",
+    "owner": "서울러",
+    "price": "4",
+    "amount": "3 / 5",
+    "amountLabel": "잔여",
+    "isFavorite": false
+  },
+  {
+    "title": "하늘 위 드론뷰",
+    "image": "/images/example15.jpg",
+    "grade": "RARE",
+    "category": "항공",
+    "owner": "드론매니아",
+    "price": "10",
+    "amount": "2 / 2",
+    "amountLabel": "잔여",
+    "isFavorite": true
+  }
+]
