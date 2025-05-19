@@ -25,7 +25,7 @@ export default function useSort() {
       case "최신순":
         return "created_desc";
       default:
-        return "created_desc";
+        return "price_asc";
     }
   }
 

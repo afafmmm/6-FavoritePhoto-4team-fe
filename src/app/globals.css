@@ -66,7 +66,7 @@
   --color-gray-100: #eeeeee;
   --color-my-red: #ff483d;
   --color-my-blue: #29c9f9;
-  --color-primay-blue: #04b8ff;
+  --color-primary-blue: #04b8ff;
   --color-my-purple: #a77eff;
   --color-my-pink: #ff2a6a;
   --color-main: #efff04;
@@ -105,6 +105,11 @@ body {
 
 @utility title-30 {
   font: 700 1.875rem "baskin", serif;
+  letter-spacing: -0.03rem;
+}
+
+@utility title-28 {
+  font: 700 1.75rem "baskin", serif;
   letter-spacing: -0.03rem;
 }
 

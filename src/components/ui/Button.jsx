@@ -61,7 +61,7 @@ const Button = ({
 
   const variantStyles = clsx({
     "bg-main text-my-black": variant === "primary" && !disabled,
-    "bg-gray-400 text-gray-300": variant === "primary" && disabled,
+    "bg-gray-400 text-white": variant === "primary" && disabled,
     "bg-my-black text-white border border-gray-100": variant === "secondary",
   });
 
