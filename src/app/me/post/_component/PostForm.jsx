@@ -7,6 +7,8 @@ import TextArea from "./TextArea";
 import Select from "./Select";
 import File from "./File";
 import Button from "@/components/ui/Button";
+import { useMutation } from "@tanstack/react-query";
+import { postCard } from "@/lib/api/api-users";
 
 export default function PostForm({ grades, genres }) {
   const [name, setName] = useState("");
@@ -25,6 +27,17 @@ export default function PostForm({ grades, genres }) {
     price: false,
     volumn: false,
   }); // 입력 여부(오류 검사 때문에 만듦22)
+
+  // BE와 연동
+  const { mutate } = useMutation({
+    mutationFn: postCard,
+    onSuccess: (data) => {
+      console.log("등록 성공", data);
+    },
+    onError: (err) => {
+      console.error("등록 실패", err.message);
+    },
+  });
 
   // 입력 상태 감지하는 함수
   const handleChange = (setter, field) => (e) => {
@@ -91,6 +104,8 @@ export default function PostForm({ grades, genres }) {
     formData.append("volumn", volumn);
     formData.append("image", image);
     formData.append("description", description);
+
+    mutate(formData);
   };
 
   return (

@@ -10,3 +10,17 @@ export async function getCardMeta() {
 
   return res.json();
 }
+
+// POST
+export async function postCard(formData) {
+  const res = await fetch(`${baseUrl}/users/post`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    throw new Error("POST 실패");
+  }
+
+  return res.json();
+}
