@@ -44,6 +44,7 @@ import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
 
+
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
   { id: "1", name: "풍경화1", price: "1", createdAt: "4" },
@@ -127,35 +128,35 @@ export default function CommonPage() {
       </div>
       <div>
         <div>
-          <StatusTag type="sale" size="sm"/>
-          <StatusTag type="sale" size="md"/>
-          <StatusTag type="sale" size="lg"/>
+          <StatusTag type="sale" size="sm" />
+          <StatusTag type="sale" size="md" />
+          <StatusTag type="sale" size="lg" />
         </div>
         <div>
-          <StatusTag type="exchange" size="sm"/>
-          <StatusTag type="exchange" size="md"/>
-          <StatusTag type="exchange" size="lg"/>
+          <StatusTag type="exchange" size="sm" />
+          <StatusTag type="exchange" size="md" />
+          <StatusTag type="exchange" size="lg" />
         </div>
         <div>
-          <GradeTag grade="COMMON"  size="xs"/>
-          <GradeTag grade="COMMON" size="md"/>
-          <GradeTag grade="COMMON" size="lg"/>
-          <GradeTag grade="COMMON" size="xl"/>
+          <GradeTag grade="COMMON" size="xs" />
+          <GradeTag grade="COMMON" size="md" />
+          <GradeTag grade="COMMON" size="lg" />
+          <GradeTag grade="COMMON" size="xl" />
 
-          <GradeTag grade="RARE" size="xs"/>
-          <GradeTag grade="RARE" size="md"/>
-          <GradeTag grade="RARE" size="lg"/>
-          <GradeTag grade="RARE" size="xl"/>
+          <GradeTag grade="RARE" size="xs" />
+          <GradeTag grade="RARE" size="md" />
+          <GradeTag grade="RARE" size="lg" />
+          <GradeTag grade="RARE" size="xl" />
 
-          <GradeTag grade="SUPER RARE" size="xs"/>
-          <GradeTag grade="SUPER RARE" size="md"/>
-          <GradeTag grade="SUPER RARE" size="lg"/>
-          <GradeTag grade="SUPER RARE" size="xl"/>
+          <GradeTag grade="SUPER RARE" size="xs" />
+          <GradeTag grade="SUPER RARE" size="md" />
+          <GradeTag grade="SUPER RARE" size="lg" />
+          <GradeTag grade="SUPER RARE" size="xl" />
 
-          <GradeTag grade="LEGENDARY" size="xs"/>
-          <GradeTag grade="LEGENDARY" size="md"/>
-          <GradeTag grade="LEGENDARY" size="lg"/>
-          <GradeTag grade="LEGENDARY" size="xl"/>
+          <GradeTag grade="LEGENDARY" size="xs" />
+          <GradeTag grade="LEGENDARY" size="md" />
+          <GradeTag grade="LEGENDARY" size="lg" />
+          <GradeTag grade="LEGENDARY" size="xl" />
         </div>
       </div>
     </div>

@@ -13,16 +13,21 @@ export default function FilterPanelSale({
     <ul>
       {saleKeys.map((key) => {
         const count = sales[key] || 0;
+        const isSelected = selectedSale === key;
         return (
           <li
             key={key}
             className={`flex justify-between py-2 cursor-pointer ${
-              selectedSale === key ? "bg-gray-800" : ""
+              isSelected ? "bg-gray-500" : ""
             }`}
             onClick={() => onSelectSale(key)}
           >
-            <span>{saleLabels[key]}</span>
-            <span>{count}개</span>
+            <span className={isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"}>
+              {saleLabels[key]}
+            </span>
+            <span className={isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"}>
+              {count}개
+            </span>
           </li>
         );
       })}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import { GiSettingsKnobs } from "react-icons/gi";
@@ -12,6 +12,28 @@ export default function FillterDropdown() {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isSmOrLarger, setIsSmOrLarger] = useState(false);
+
+
+  const SM_WIDTH = 744;
+
+  // 윈도우 사이즈 감지
+  useEffect(() => {
+    function handleResize() {
+      const isSm = window.innerWidth >= SM_WIDTH;
+      setIsSmOrLarger(isSm);
+      // sm 이상이면 모바일 바텀시트 닫기
+      if (isSm && isBottomSheetOpen) setIsBottomSheetOpen(false);
+      // sm 이하이면 데스크탑 드롭다운 닫기
+      if (!isSm && isOpen) setIsOpen(false);
+    }
+
+    // 최초 실행
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isBottomSheetOpen, isOpen]);
 
   // 고정된 등급 목록
   const grades = ["전체", "COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
@@ -33,7 +55,7 @@ export default function FillterDropdown() {
       {/* 데스크톱용 드롭다운 버튼 */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="hidden md:flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-16"
+        className="hidden md:flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-16 cursor-pointer"
       >
         <span>등급</span>
         {isOpen ? <GoTriangleUp className="ml-1" /> : <GoTriangleDown className="ml-1" />}
@@ -48,7 +70,7 @@ export default function FillterDropdown() {
       </div>
 
       {/* 데스크톱 드롭다운 메뉴 */}
-      {isOpen && (
+      {isOpen && !(!isSmOrLarger) && ( 
         <ul className="absolute mt-2 bg-black border text-white w-[134px] z-10">
           {grades.map((grade) => (
             <li
@@ -63,7 +85,7 @@ export default function FillterDropdown() {
       )}
 
       {/* 모바일 바텀시트 */}
-      {isBottomSheetOpen && (
+      {isBottomSheetOpen && !isSmOrLarger && (
         <BottomSheet onClose={() => setIsBottomSheetOpen(false)} />
       )}
     </div>

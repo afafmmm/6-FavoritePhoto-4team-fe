@@ -1,13 +1,13 @@
+import GradeTag from "../tag/GradeTag.jsx"; 
+
 const gradeOptions = ["COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
 
 export default function FilterPanelGrade({ grades = {}, selectedGrades = [], onSelectGrade }) {
   // 중복 선택 토글 함수
   const handleClick = (grade) => {
     if (selectedGrades.includes(grade)) {
-      // 이미 선택된 거면 제거
       onSelectGrade(selectedGrades.filter((g) => g !== grade));
     } else {
-      // 선택 안된 거면 추가
       onSelectGrade([...selectedGrades, grade]);
     }
   };
@@ -22,11 +22,12 @@ export default function FilterPanelGrade({ grades = {}, selectedGrades = [], onS
           <li
             key={grade}
             className={`flex justify-between py-2 cursor-pointer ${
-              isSelected ? "bg-gray-800" : ""
+              isSelected ? "bg-gray-500" : ""
             }`}
             onClick={() => handleClick(grade)}
           >
-            <span>{grade}</span>
+            <GradeTag grade={grade} size="xs" />
+
             <span>{count}개</span>
           </li>
         );

@@ -1,37 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useMemo } from "react";
 import FilterTab from "./FilterTab";
 import FilterPanelGrade from "./FilterPanelGrade";
 import FilterPanelGenre from "./FilterPanelGenre";
 import FilterPanelSale from "./FilterPanelSale";
 import { useFilterQuery } from "@/lib/api/api-bottomfilter";
+import { IoClose } from "react-icons/io5";
+import { RiResetLeftFill } from "react-icons/ri";
 
 export default function BottomSheet({ onClose }) {
   const [selectedTab, setSelectedTab] = useState("grade");
   const [selectedGrades, setSelectedGrades] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [filter, setFilter] = useState({
-    grade: null,
-    genre: null,
-    sale: null,
-  });
+  const [selectedSale, setSelectedSale] = useState(null);
   const [loading, setLoading] = useState(false);
   const [counts, setCounts] = useState({
     grade: {},
     genre: {},
     sale: {},
   });
+  const [filteredCount, setFilteredCount] = useState(0);
 
-  const { refetch } = useFilterQuery(filter);
+  // 🔑 실시간 필터 상태를 계산
+  const currentFilter = useMemo(
+    () => ({
+      grade: selectedGrades.length > 0 ? selectedGrades : null,
+      genre: selectedGenres.length > 0 ? selectedGenres : null,
+      sale: selectedSale ?? null,
+    }),
+    [selectedGrades, selectedGenres, selectedSale]
+  );
 
-  // 전체 데이터에서 한 번만 카운트 계산하는
+  const { refetch } = useFilterQuery(currentFilter);
+
   useEffect(() => {
     async function fetchAllAndCount() {
       try {
         setLoading(true);
-        // 전체 데이터 요청 (필터 없이)
         const res = await fetch("/api/mock");
         const allData = await res.json();
 
@@ -49,13 +55,13 @@ export default function BottomSheet({ onClose }) {
     fetchAllAndCount();
   }, []);
 
-  // 필터 변경 시 데이터 받아서 카운트 집계
+  // 선택 항목이 변경될 때마다 결과 개수 갱신
   useEffect(() => {
     async function fetchFiltered() {
       try {
         setLoading(true);
         const { data } = await refetch();
-        // 필터된 사진 목록을 활용 (필요하면 상태로 관리)
+        setFilteredCount(data.length);
       } catch (err) {
         console.error("필터 사진 요청 실패:", err);
       } finally {
@@ -63,7 +69,7 @@ export default function BottomSheet({ onClose }) {
       }
     }
     fetchFiltered();
-  }, [filter, refetch]);
+  }, [currentFilter, refetch]);
 
   function countByKey(items, key) {
     return items.reduce((acc, item) => {
@@ -84,17 +90,28 @@ export default function BottomSheet({ onClose }) {
       setLoading(false);
     }
   };
+  const isFilterActive =
+    selectedGrades.length > 0 ||
+    selectedGenres.length > 0 ||
+    selectedSale !== null;
+
+  const handleReset = () => {
+    setSelectedGrades([]);
+    setSelectedGenres([]);
+    setSelectedSale(null);
+    setFilteredCount(0);
+  };
 
   return (
-    <div className="fixed flex flex-col justify-between bottom-0 left-0 w-full h-120 bg-black text-white p-4 z-50 border-t border-gray-700 rounded-t-2xl max-h-[70vh] overflow-auto">
+    <div className="fixed flex flex-col justify-between bottom-0 left-0 w-full h-120 bg-[#1B1B1B] text-white p-4 z-50 border-t border-gray-700 rounded-t-2xl max-h-[70vh] overflow-auto">
       <div>
         <div className="relative text-center">
-          <h2 className="text-lg font-bold">필터</h2>
+          <p className="text-lg font-bold text-400-16 text-gray-400">필터</p>
           <button
             onClick={onClose}
-            className="absolute right-0 top-1/2 -translate-y-1/2 text-2xl text-gray-400 font-light"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-2xl text-gray-400 font-light cursor-pointer"
           >
-            ×
+            <IoClose />
           </button>
         </div>
 
@@ -107,7 +124,6 @@ export default function BottomSheet({ onClose }) {
             onSelectGrade={setSelectedGrades}
           />
         )}
-
         {selectedTab === "genre" && (
           <FilterPanelGenre
             counts={counts.genre}
@@ -115,25 +131,35 @@ export default function BottomSheet({ onClose }) {
             onSelectGenres={setSelectedGenres}
           />
         )}
-
         {selectedTab === "sale" && (
           <FilterPanelSale
             sales={counts.sale}
-            selectedSale={filter.sale}
-            onSelectSale={(saleKey) =>
-              setFilter((prev) => ({ ...prev, sale: saleKey }))
-            }
+            selectedSale={selectedSale}
+            onSelectSale={setSelectedSale}
           />
         )}
       </div>
 
-      <button
-        className="w-full bg-yellow-400 text-black py-3 font-bold mt-4 rounded disabled:opacity-50"
-        onClick={handleApply}
-        disabled={loading}
-      >
-        {loading ? "불러오는 중..." : "포토보기"}
-      </button>
+      <div className="flex items-center">
+        <div
+          className="flex items-center justify-center w-[54px] h-[54px] cursor-pointer"
+          onClick={handleReset}
+        >
+          <RiResetLeftFill className="w-[21px] h-[21px]" />
+        </div>
+
+        <button
+          className="w-full bg-yellow-400 text-black py-3 font-bold mt-4 rounded disabled:opacity-50 cursor-pointer"
+          onClick={handleApply}
+          disabled={loading}
+        >
+          {loading
+            ? "불러오는 중..."
+            : isFilterActive
+            ? `${filteredCount}개 포토보기`
+            : "포토보기"}
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,17 @@
 export const fetchPhotosByFilter = async (filter) => {
-  const query = new URLSearchParams(
-    Object.entries(filter).filter(([_, v]) => v !== null && v !== "").map(([k, v]) => [k, v])
-  ).toString();
+  const queryParams = new URLSearchParams();
+
+  Object.entries(filter).forEach(([key, value]) => {
+    if (value === null || value === "") return;
+
+    if (Array.isArray(value)) {
+      value.forEach((v) => queryParams.append(key, v));
+    } else {
+      queryParams.append(key, value);
+    }
+  });
+
+  const query = queryParams.toString();
 
   const res = await fetch(`/api/mock?${query}`);
 
