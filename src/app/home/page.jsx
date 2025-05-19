@@ -6,7 +6,7 @@ import { Suspense } from "react";
 async function BaseCards() {
   // await delay(2000); 
   
-  const res = await fetch('http://localhost:3000/data/cards.json', {next : {revalidate : 60}});
+  const res = await fetch('http://localhost:3000/data/cards.json', {cache : "force-cache"});
   if(!res.ok) {
     return null;
   }
