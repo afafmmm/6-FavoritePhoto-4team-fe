@@ -1,10 +1,8 @@
-
 import React from "react";
 import Image from "next/image";
 import favicon from "@/assets/favicon.svg";
 import GradeTag from "../tag/GradeTag";
 import example from "@/assets/example.svg";
-
 
 export default function BaseCard({
   title,
@@ -15,7 +13,6 @@ export default function BaseCard({
   price,
   amount,
   amountLabel = "", // 수량 or 잔여 선택
-  isFavorite = false,
   children, // 설명이나 버튼 등 option
   showPurchasePrice = false, // "4P에 구매" option
 }) {
@@ -50,7 +47,7 @@ export default function BaseCard({
     <div className="bg-my-black text-white w-full px-2 py-2 md:px-5 md:py-5 lg:px-8 lg:py-8 border border-gray-800">
       {/* 이미지 */}
       <div className="w-full aspect-[4/3] relative mb-3 md:mb-5">
-        <Image src={image} alt={title} fill className="object-cover" />
+        <Image src={example} alt={title} fill className="object-cover" />
       </div>
 
       {/* 제목 */}
@@ -100,12 +97,9 @@ export default function BaseCard({
       {/* 설명, 버튼 영역 */}
       {children && <div className="mt-4">{children}</div>}
 
-      {/* 로고 */}
-      {isFavorite && (
-        <div className="hidden md:flex justify-center mt-4">
-          <Image src={favicon} alt="최애" width={80} height={80} />
-        </div>
-      )}
+      <div className="hidden md:flex justify-center mt-4">
+        <Image src={favicon} alt="최애" className="w-20 h-4" />
+      </div>
     </div>
   );
 }
