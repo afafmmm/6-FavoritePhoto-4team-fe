@@ -8,12 +8,9 @@ export default function File({ label, error, onChange }) {
   const fileRef = useRef();
 
   const [fileName, setFileName] = useState("사진 업로드");
-  const [clicked, setClicked] = useState(false); // 맨 처음에 + 클릭했으면 오류 메시지 안 뜸
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
-
-    setClicked(true);
 
     if (file) {
       setFileName(file.name);
@@ -31,7 +28,7 @@ export default function File({ label, error, onChange }) {
         <div
           className={clsx(
             fileName === "사진 업로드" ? "text-gray-200" : "text-white",
-            clicked && error ? "border-my-red" : "border-gray-200",
+            error ? "border-my-red" : "border-gray-200",
             "h-full w-[230px] md:w-[310px] lg:w-[390px] outline-none text-300-14 lg:text-300-16 border  rounded-[2px] flex items-center px-5 py-[18px]"
           )}
         >
@@ -45,7 +42,7 @@ export default function File({ label, error, onChange }) {
           파일 선택
         </button>
       </div>
-      <ErrorText error={clicked && error} />
+      <ErrorText error={error} />
       {/* ↓ 숨김 */}
       <input
         type="file"

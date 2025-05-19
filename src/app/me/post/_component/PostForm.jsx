@@ -7,7 +7,6 @@ import TextArea from "./TextArea";
 import Select from "./Select";
 import File from "./File";
 import Button from "@/components/ui/Button";
-import Sort from "@/components/ui/Sort";
 
 export default function PostForm({ grades, genres }) {
   const [name, setName] = useState("");
@@ -20,7 +19,18 @@ export default function PostForm({ grades, genres }) {
 
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
-  const [clicked, setClicked] = useState(false); // SelectBox 오류 처리 때문에 만듦 -- 클릭하면 즉시 상태 반영
+  const [isSubmitted, setIsSubmitted] = useState(false); // 제출 여부(오류 검사 때문에 만듦)
+  const [touched, setTouched] = useState({
+    name: false,
+    price: false,
+    volumn: false,
+  }); // 입력 여부(오류 검사 때문에 만듦22)
+
+  // 입력 상태 감지하는 함수
+  const handleChange = (setter, field) => (e) => {
+    setter(e.target.value);
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   // 유효성 검사
   const validate = () => {
@@ -66,7 +76,7 @@ export default function PostForm({ grades, genres }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setClicked(true); // 클릭했어! 오류 없애!
+    setIsSubmitted(true); // 제출했어!
     const valid = validate();
     setIsValid(valid);
 
@@ -99,21 +109,21 @@ export default function PostForm({ grades, genres }) {
         name="name"
         placeholder="포토카드 이름을 입력해 주세요"
         value={name}
-        onChange={(e) => setName(e.target.value)}
-        error={errors.name}
+        onChange={handleChange(setName, "name")}
+        error={(isSubmitted || touched.name) && errors.name}
       />
       <Select
         type="등급"
         options={grades}
         selected={grade}
-        error={clicked ? errors.grade : null}
+        error={isSubmitted && errors.grade}
         onChange={(e) => setGrade(e)}
       />
       <Select
         type="장르"
         options={genres}
         selected={genre}
-        error={clicked ? errors.genre : null}
+        error={isSubmitted && errors.genre}
         onChange={(e) => setGenre(e)}
       />
       <Input
@@ -121,18 +131,22 @@ export default function PostForm({ grades, genres }) {
         name="price"
         placeholder="가격을 입력해 주세요"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        error={errors.price}
+        onChange={handleChange(setPrice, "price")}
+        error={(isSubmitted || touched.price) && errors.price}
       />
       <Input
         label="총 발행량"
         name="volumn"
         placeholder="총 발행량을 입력해 주세요"
         value={volumn}
-        onChange={(e) => setVolumn(e.target.value)}
-        error={errors.volumn}
+        onChange={handleChange(setVolumn, "volumn")}
+        error={(isSubmitted || touched.volumn) && errors.volumn}
       />
-      <File label="사진 업로드" error={errors.image} onChange={setImage} />
+      <File
+        label="사진 업로드"
+        error={isSubmitted && errors.image}
+        onChange={setImage}
+      />
       <TextArea
         label="포토카드 설명"
         name="description"
