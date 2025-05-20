@@ -66,11 +66,11 @@ export default function FillterDropdown() {
 
       {/* 모바일용 설정 아이콘 */}
       <div
-        className="flex justify-center items-center w-[35px] h-[35px] md:hidden cursor-pointer"
+        className="flex justify-center items-center w-[35px] h-[35px] border border-gray-200 rounded-xs md:hidden cursor-pointer"
         onClick={() => setIsBottomSheetOpen(true)}
       >
         <GiSettingsKnobs
-          className="text-2xl"
+          className="w-5 h-5 font-bold"
           style={{ transform: "rotate(90deg)" }}
         />
       </div>
@@ -101,7 +101,7 @@ export default function FillterDropdown() {
           />
 
           {/* 바텀시트 */}
-          <BottomSheet onClose={() => setIsBottomSheeapen(false)} />
+          <BottomSheet onClose={() => setIsBottomSheetOpen(false)} />
         </>
       )}
     </div>

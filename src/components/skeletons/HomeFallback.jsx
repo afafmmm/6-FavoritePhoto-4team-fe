@@ -3,7 +3,7 @@ import React from "react";
 export default function HomeFallback() {
   return (
     <>
-      {Array.from({ length: 6 }).map((_, index) => (
+      {Array.from({ length: 12 }).map((_, index) => (
         <div
           key={index}
           className="bg-my-black text-white w-full px-2 py-2 md:px-5 md:py-5 lg:px-8 lg:py-8 border border-gray-800 animate-pulse"

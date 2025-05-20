@@ -1,7 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import mainLogoImg from "@/assets/main-logo.png";
 import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
 
 // 임시 로그인 상태 (실제 구현시 props/context/hook 등으로 대체 필요)
 const isLoggedIn = false; // true로 바꾸면 로그인 상태 테스트 가능
@@ -13,10 +18,21 @@ const user = {
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const pathname = usePathname();
+  
+  useEffect(() => {
+    // update pathname
+  }, [pathname])
 
   return (
-    <>
-      <nav className="bg-black w-full h-14 flex items-center justify-between px-4 py-3 md:h-20 md:px-[40px] md:py-[23px] lg:px-[220px] lg:py-[27px] md:flex md:grid-cols-none md:items-center md:justify-between">
+    <header className="sticky top-0 left-0 z-[8888]  bg-my-black">
+      <nav 
+      className={`
+          flex items-center 
+          max-w-[1480px] h-[60px] md:h-[70px] lg:h-[80px]
+          ${pathname && pathname === '/' ? "mx-auto px-4 md:px-9 lg:px-0" : ""}
+      `}
+      >
         {/* 왼쪽: 햄버거 메뉴 (sm=기본, md 이상에서 숨김) */}
         <div className="flex items-center md:hidden">
           <button type="button" onClick={() => setMenuOpen(true)}>
@@ -26,16 +42,13 @@ const Navbar = () => {
               className="w-[22px] h-[22px]"
             />
           </button>
+
         </div>
         {/* 가운데: 로고 (sm에서는 가운데, md 이상에서는 왼쪽) */}
         <div className="flex items-center justify-center flex-1 md:justify-start md:flex-none">
-          <a href="/">
-            <img
-              src="/img/logo.svg"
-              alt="최애의포토"
-              className="w-[83.37px] h-[15.12px] md:w-[111px] md:h-[20px] lg:w-[138.94px] lg:h-[25.2px]"
-            />
-          </a>
+          <Link href={"/"}>
+            <Image src={mainLogoImg} alt="main-logo" className="w-[83px] h-[15px] md:w-28 md:h-5 lg:w-[138px] lg:h-6"/>
+          </Link>
         </div>
         {/* 오른쪽: 알림 또는 로그인 (sm에서만 보임) */}
         <div className="flex items-center justify-end md:hidden">
@@ -46,18 +59,18 @@ const Navbar = () => {
               className="w-[22px] h-[22px]"
             />
           ) : (
-            <a
-              href="/login"
-              className="text-400-14 text-white hover:text-gray-400"
+            <Link
+              href={"/login"}
+              className="text-400-14 text-gray-200 hover:text-gray-400"
             >
               로그인
-            </a>
+            </Link>
           )}
         </div>
         {/* 데스크탑 네비게이션: md 이상에서만 보임 */}
         <div className="hidden md:flex flex-1 justify-end items-center">
           {isLoggedIn ? (
-            <ul className="flex items-center space-x-[30px] text-white text-[14px]">
+            <ul className="flex items-center space-x-[30px] text-gray-200 text-[14px]">
               <li className="text-700-14 text-gray-200">
                 {user.point.toLocaleString()} P
               </li>
@@ -84,26 +97,22 @@ const Navbar = () => {
                 />
               </li>
               <li>
-                <a
-                  href="/logout"
-                  className="border-l pl-[30px] text-gray-400 border-gray-400 hover:text-gray-400 h-4 flex items-center"
-                  style={{ alignSelf: "center" }}
-                >
+                <button className="border-l pl-[30px] text-gray-400 border-gray-400 hover:text-gray-400 h-4 flex items-center">
                   로그아웃
-                </a>
+                </button>
               </li>
             </ul>
           ) : (
-            <ul className="flex space-x-6 text-white text-[14px]">
+            <ul className="flex space-x-6 text-gray-200 text-[14px]">
               <li>
-                <a href="/login" className="hover:text-gray-400">
+                <Link href={"/login"} className="hover:text-gray-400">
                   로그인
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/signup" className="hover:text-gray-400">
+                <Link href="/signup" className="hover:text-gray-400">
                   회원가입
-                </a>
+                </Link>
               </li>
             </ul>
           )}
@@ -113,7 +122,7 @@ const Navbar = () => {
       {menuOpen && (
         <CurtainMenu user={user} onClose={() => setMenuOpen(false)} />
       )}
-    </>
+    </header>
   );
 };
 
