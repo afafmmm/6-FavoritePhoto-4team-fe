@@ -43,6 +43,7 @@ import { Title } from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
+import CardBuyer from "@/components/CardBuyer/CardBuyer";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -71,6 +72,9 @@ const sortMockData = (data, orderBy) => {
 export default function CommonPage() {
   const [orderBy, setOrderBy] = useState("price_asc"); // state 추가
 
+  const handleBuy = (qty) => {
+    alert(`구매 수량: ${qty}`);
+  };
   const { data = [] } = useQuery({
     queryKey: ["cards", orderBy], // 조건에 order 넣고
     queryFn: () => sortMockData(mockdata, orderBy), // 함수 실행할 때도 조건 넣음
@@ -98,6 +102,16 @@ export default function CommonPage() {
       {data?.map((data) => {
         return <div key={data.id}>{data.name}</div>;
       })}
+      <CardBuyer
+        tier="COMMON"
+        subLabel="동물" 
+        creator="하이"
+        description="귀여운 동물 포토카드입니다."
+        pricePerCard={4}
+        remaining={2}
+        total={5}
+        onBuy={handleBuy}
+      />
       {/* Button 컴포넌트 테스트 섹션 - Button.jsx에 정의된 type 사용 */}
       <div className="mt-8 p-4 border-t border-gray-700">
         <h2 className="text-xl text-white mb-4">

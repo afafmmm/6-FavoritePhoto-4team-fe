@@ -14,7 +14,6 @@ export default function FillterDropdown() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
 
-
   const SM_WIDTH = 744;
 
   // 윈도우 사이즈 감지
@@ -58,7 +57,11 @@ export default function FillterDropdown() {
         className="hidden md:flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-16 cursor-pointer"
       >
         <span>등급</span>
-        {isOpen ? <GoTriangleUp className="ml-1" /> : <GoTriangleDown className="ml-1" />}
+        {isOpen ? (
+          <GoTriangleUp className="ml-1" />
+        ) : (
+          <GoTriangleDown className="ml-1" />
+        )}
       </button>
 
       {/* 모바일용 설정 아이콘 */}
@@ -66,11 +69,14 @@ export default function FillterDropdown() {
         className="flex justify-center items-center w-[35px] h-[35px] md:hidden cursor-pointer"
         onClick={() => setIsBottomSheetOpen(true)}
       >
-        <GiSettingsKnobs className="text-2xl" style={{ transform: "rotate(90deg)" }} />
+        <GiSettingsKnobs
+          className="text-2xl"
+          style={{ transform: "rotate(90deg)" }}
+        />
       </div>
 
       {/* 데스크톱 드롭다운 메뉴 */}
-      {isOpen && !(!isSmOrLarger) && ( 
+      {isOpen && !!isSmOrLarger && (
         <ul className="absolute mt-2 bg-black border text-white w-[134px] z-10">
           {grades.map((grade) => (
             <li
@@ -86,7 +92,17 @@ export default function FillterDropdown() {
 
       {/* 모바일 바텀시트 */}
       {isBottomSheetOpen && !isSmOrLarger && (
-        <BottomSheet onClose={() => setIsBottomSheetOpen(false)} />
+        <>
+          {/* 배경 오버레이 */}
+          <div
+            className="fixed inset-0 bg-black z-30"
+            style={{ opacity: 0.5 }}
+            onClick={() => setIsBottomSheetOpen(false)}
+          />
+
+          {/* 바텀시트 */}
+          <BottomSheet onClose={() => setIsBottomSheeapen(false)} />
+        </>
       )}
     </div>
   );
