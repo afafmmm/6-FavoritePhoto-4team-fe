@@ -1,3 +1,5 @@
+// 설명 부분 60자 글자수 제한 추가해야 함
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -9,6 +11,7 @@ import File from "./File";
 import Button from "@/components/ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { postCard } from "@/lib/api/api-users";
+import { useModal } from "@/providers/ModalProvider";
 
 export default function PostForm({ grades, genres }) {
   const [name, setName] = useState("");
@@ -26,15 +29,19 @@ export default function PostForm({ grades, genres }) {
     name: false,
     price: false,
     volumn: false,
+    description: false,
   }); // 입력 여부(오류 검사 때문에 만듦22)
+
+  const { openModal } = useModal(); // 모달 provider
 
   // BE와 연동
   const { mutate } = useMutation({
     mutationFn: postCard,
     onSuccess: (data) => {
-      console.log("등록 성공", data);
+      openModal(201, "생성", { grade, name, count: volumn });
     },
     onError: (err) => {
+      openModal(500, "생성", { grade, name, count: volumn });
       console.error("등록 실패", err.message);
     },
   });
@@ -74,6 +81,10 @@ export default function PostForm({ grades, genres }) {
 
     if (!image) newError.image = "파일을 선택해 주세요.";
 
+    if (description.length > 60) {
+      newError.description = "설명은 60자 이내로 입력해 주세요.";
+    }
+
     const isFormValid = Object.keys(newError).length === 0;
     setErrors(newError);
     setIsValid(isFormValid);
@@ -83,7 +94,7 @@ export default function PostForm({ grades, genres }) {
 
   useEffect(() => {
     validate();
-  }, [name, grade, genre, price, volumn, image]);
+  }, [name, grade, genre, price, volumn, image, description]);
 
   // 제출 함수
   const handleSubmit = (e) => {
@@ -167,7 +178,8 @@ export default function PostForm({ grades, genres }) {
         name="description"
         placeholdrer="카드 설명을 입력해 주세요"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={handleChange(setDescription, "description")}
+        error={(isSubmitted || touched.description) && errors.description}
       />
       <Button type="exchangeGreen" disabled={!isValid}>
         생성하기
