@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 
 const CurtainMenu = ({ user, onClose }) => (
@@ -27,13 +28,11 @@ const CurtainMenu = ({ user, onClose }) => (
           판매 중인 포토카드
         </a>
       </nav>
-      <a
-        href="/logout"
-        className="text-400-14 text-gray-400  ml-5 mt-auto mb-[43px]"
-        style={{ display: "block" }}
+      <button
+        className="text-left text-400-14 text-gray-400  ml-5 mt-auto mb-11 cursor-pointer"
       >
         로그아웃
-      </a>
+      </button>
     </div>
     <div className="flex-1 cursor-pointer" onClick={onClose} />
   </div>
