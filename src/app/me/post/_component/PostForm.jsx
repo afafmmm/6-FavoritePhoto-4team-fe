@@ -11,7 +11,7 @@ import File from "./File";
 import Button from "@/components/ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { postCard } from "@/lib/api/api-users";
-import { useModal } from "@/providers/ModalProvider";
+import { useStateModal } from "@/providers/StateModalProvider";
 
 export default function PostForm({ grades, genres }) {
   const [name, setName] = useState("");
@@ -32,7 +32,7 @@ export default function PostForm({ grades, genres }) {
     description: false,
   }); // 입력 여부(오류 검사 때문에 만듦22)
 
-  const { openModal } = useModal(); // 모달 provider
+  const { openModal } = useStateModal(); // 모달 provider
 
   // BE와 연동
   const { mutate } = useMutation({
@@ -58,8 +58,8 @@ export default function PostForm({ grades, genres }) {
 
     if (!name) {
       newError.name = { none: "카드 이름을 입력해 주세요." };
-    } else if (name.length > 15) {
-      newError.name = { over: "15자 이내로 입력해 주세요." };
+    } else if (name.length > 10) {
+      newError.name = { over: "10자 이내로 입력해 주세요." };
     }
 
     if (!grade) newError.grade = "등급을 선택해 주세요.";

@@ -1,13 +1,13 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useModal } from "@/providers/ModalProvider";
+import { useStateModal } from "@/providers/StateModalProvider";
 import Button from "../ui/Button";
 import clsx from "clsx";
 import { FiX } from "react-icons/fi";
 
 export default function StateModal() {
   const router = useRouter();
-  const { isOpen, status, type, cardInfo, openModal, closeModal } = useModal();
+  const { isOpen, status, type, cardInfo, closeModal } = useStateModal();
 
   if (!isOpen) return null;
 
@@ -18,42 +18,42 @@ export default function StateModal() {
   let textOrCount = "";
   let title = "";
 
-  if (type === "판매") {
-    if (isSuccess) {
-      buttonText = "나의 판매 포토카드에서 확인하기";
-      path = "/"; // 팀원들이 페이지 만들고 나서 경로 수정해야 함
-      textOrCount = cardInfo.count + "장";
+  switch (type) {
+    case "판매":
       title = "판매 등록";
-    } else {
-      buttonText = "마켓플레이스로 돌아가기";
-      path = "/home";
       textOrCount = cardInfo.count + "장";
-      title = "판매 등록";
-    }
-  } else if (type === "구매") {
-    if (isSuccess) {
-      buttonText = "마이갤러리에서 확인하기";
-      path = "/me";
-      textOrCount = cardInfo.count + "장";
+      if (isSuccess) {
+        buttonText = "나의 판매 포토카드에서 확인하기";
+        path = "/"; // 팀원들이 페이지 만들고 나서 경로 수정해야 함
+      } else {
+        buttonText = "마켓플레이스로 돌아가기";
+        path = "/home";
+      }
+      break;
+
+    case "구매":
       title = "구매";
-    } else {
-      buttonText = "마켓플레이스로 돌아가기";
-      path = "/home";
       textOrCount = cardInfo.count + "장";
-      title = "구매";
-    }
-  } else if (type === "생성") {
-    if (isSuccess) {
-      buttonText = "마이갤러리에서 확인하기";
-      path = "/me";
-      textOrCount = "포토카드";
+      if (isSuccess) {
+        buttonText = "마이갤러리에서 확인하기";
+        path = "/me";
+      } else {
+        buttonText = "마켓플레이스로 돌아가기";
+        path = "/home";
+      }
+      break;
+
+    case "생성":
       title = "포토카드 생성";
-    } else {
-      buttonText = "마이갤러리로 돌아가기";
-      path = "/me";
       textOrCount = "포토카드";
-      title = "포토카드 생성";
-    }
+      if (isSuccess) {
+        buttonText = "마이갤러리에서 확인하기";
+        path = "/me";
+      } else {
+        buttonText = "마이갤러리로 돌아가기";
+        path = "/me";
+      }
+      break;
   }
 
   // 이동
@@ -83,7 +83,7 @@ export default function StateModal() {
             </span>
           </h3>
 
-          <p className="text-700-16 text-center mb-10 md:mb-20">
+          <p className="text-700-16 text-center mb-10 md:mb-20 text-nowrap">
             <span>
               [{cardInfo.grade} | {cardInfo.name}]&nbsp;
             </span>

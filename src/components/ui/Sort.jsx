@@ -23,7 +23,7 @@ export default function Sort({ onClick }) {
         onClick={toggle}
         className="rounded-[2px] w-full h-[50px] border-1 px-[20px] mb-[5px] border-gray-200 flex justify-between items-center bg-my-black cursor-pointer"
       >
-        <span className="text-400-12 md:text-400-14 lg:text-400-16">
+        <span className="text-400-12 md:text-400-14 lg:text-400-16 text-nowrap">
           {order}
         </span>
         <MdArrowDropDown
@@ -32,7 +32,7 @@ export default function Sort({ onClick }) {
       </button>
 
       {isOpen && (
-        <div className="rounded-[2px] w-full border-1 flex flex-col border-gray- bg-my-black200 gap-[15px] py-[15px] text-400-12 md:text-400-14 lg:text-400-16 absolute bg-my-black">
+        <div className="rounded-[2px] w-full border-1 flex flex-col border-gray- bg-my-black200 gap-[15px] py-[15px] text-400-12 md:text-400-14 lg:text-400-16 absolute bg-my-black z-10">
           {options.map((opt) => (
             <div
               key={opt}
