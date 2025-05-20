@@ -42,7 +42,7 @@ export default function CardBuyer({
   const gradeSize = isLargeScreen ? "xl" : "lg";
 
   return (
-    <div className="border border-gray-700 p-4 flex flex-col gap-4 bg-black text-white w-full h-[529px] lg:h-[612px]">
+    <div className=" p-4 flex flex-col gap-4  text-white w-full h-[529px] lg:h-[612px]">
       <div className="flex items-center gap-2 text-sm">
         
         {isLargeScreen !== null && <GradeTag grade={tier} size={gradeSize} />}

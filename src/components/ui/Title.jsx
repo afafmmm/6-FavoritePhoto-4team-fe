@@ -35,7 +35,7 @@ export const Title = ({
   buttonText,
   onButtonClick,
   font = "titleLg_Bk",
-  buttonColor = "yellow", 
+  buttonColor = "yellow",
 }) => {
   const fontClass = {
     titleLg_Bk: "title-48 text-white md:title-62",
@@ -45,12 +45,12 @@ export const Title = ({
   }[font];
 
   const buttonClass = {
-    yellow: "bg-main text-black", 
-    black: "bg-black text-white border", 
+    yellow: "bg-main text-black",
+    black: "bg-black text-white border",
   }[buttonColor];
 
   return (
-    <div className="flex justify-between items-center min-w-[700px] md:min-w-[900px] border-b border-white pb-3 mb-3">
+    <div className="flex justify-between items-center border-b border-white pb-3 mb-3">
       <h1 className={fontClass}>{title}</h1>
       {buttonText && (
         <button
@@ -58,6 +58,7 @@ export const Title = ({
           className={`${buttonClass} w-[342px] h-[60px] text-700-16 md:w-[440px] md:h-[60px] md:text-700-18 px-4 py-2 rounded cursor-pointer `}
         >
           {buttonText}
+          
         </button>
       )}
     </div>

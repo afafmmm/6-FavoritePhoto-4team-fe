@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import { GiSettingsKnobs } from "react-icons/gi";
@@ -14,6 +14,7 @@ export default function FillterDropdown() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
 
+  const dropdownRef = useRef(null);
   const SM_WIDTH = 744;
 
   // 윈도우 사이즈 감지
@@ -21,20 +22,32 @@ export default function FillterDropdown() {
     function handleResize() {
       const isSm = window.innerWidth >= SM_WIDTH;
       setIsSmOrLarger(isSm);
-      // sm 이상이면 모바일 바텀시트 닫기
       if (isSm && isBottomSheetOpen) setIsBottomSheetOpen(false);
-      // sm 이하이면 데스크탑 드롭다운 닫기
       if (!isSm && isOpen) setIsOpen(false);
     }
 
-    // 최초 실행
     handleResize();
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [isBottomSheetOpen, isOpen]);
 
-  // 고정된 등급 목록
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   const grades = ["전체", "COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
 
   const handleSelect = (grade) => {
@@ -54,7 +67,7 @@ export default function FillterDropdown() {
       {/* 데스크톱용 드롭다운 버튼 */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="hidden md:flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px] bg-black text-white border-none px-2 md:text-700-14 lg:text-700-16 cursor-pointer"
+        className="hidden md:flex items-center justify-between md:w-[70px] md:h-[22px] lg:w-[70px] lg:h-[35px]  text-white border-none px-2 md:text-700-14 lg:text-700-16 cursor-pointer"
       >
         <span>등급</span>
         {isOpen ? (
@@ -77,7 +90,10 @@ export default function FillterDropdown() {
 
       {/* 데스크톱 드롭다운 메뉴 */}
       {isOpen && !!isSmOrLarger && (
-        <ul className="absolute mt-2 bg-black border text-white w-[134px] z-10">
+        <ul
+          ref={dropdownRef}
+          className="absolute mt-2 bg-black border text-white w-[134px] z-10"
+        >
           {grades.map((grade) => (
             <li
               key={grade}
@@ -93,7 +109,6 @@ export default function FillterDropdown() {
       {/* 모바일 바텀시트 */}
       {isBottomSheetOpen && !isSmOrLarger && (
         <>
-          {/* 배경 오버레이 */}
           <div
             className="fixed inset-0 bg-black z-30"
             style={{ opacity: 0.5 }}
