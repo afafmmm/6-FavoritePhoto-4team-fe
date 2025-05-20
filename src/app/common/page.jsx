@@ -106,10 +106,21 @@ export default function CommonPage() {
         tier="COMMON"
         subLabel="동물" 
         creator="하이"
-        description="귀여운 동물 포토카드입니다."
+        description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요"
         pricePerCard={4}
         remaining={2}
         total={5}
+        onBuy={handleBuy}
+      />
+
+       <CardBuyer
+        tier="RARE"
+        subLabel="동물" 
+        creator="하이"
+        description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요요요요요요요."
+        pricePerCard={7}
+        remaining={8}
+        total={8}
         onBuy={handleBuy}
       />
       {/* Button 컴포넌트 테스트 섹션 - Button.jsx에 정의된 type 사용 */}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GradeTag from "../tag/GradeTag";
+import { FaPlus, FaMinus } from "react-icons/fa6";
+import Button from "../ui/Button.jsx";
 
-// 고정된 subLabel 목록
 const FIXED_LABELS = ["여행", "풍경", "인물", "사물"];
 
 export default function CardBuyer({
@@ -17,6 +18,7 @@ export default function CardBuyer({
   onBuy,
 }) {
   const [quantity, setQuantity] = useState(2);
+  const [isLargeScreen, setIsLargeScreen] = useState(null); 
 
   const safeSubLabel = FIXED_LABELS.includes(subLabel) ? subLabel : "풍경";
 
@@ -27,71 +29,85 @@ export default function CardBuyer({
 
   const totalPrice = pricePerCard * quantity;
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1480);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const gradeSize = isLargeScreen ? "xl" : "lg";
+
   return (
-    <div className="border border-gray-700 p-4 flex flex-col gap-4 bg-black text-white w-full max-w-sm">
-      {/* 타이틀 */}
-      <div className="flex items-center gap-2 text-sm border-b">
-        {/* 여기서 GradeTag를 사용 */}
-        <GradeTag grade={tier} size="lg" />
-        <span className="text-700-18 text-gray-300">| {safeSubLabel}</span>
-        {creator && <span className="ml-auto text-700-18">{creator}</span>}
+    <div className="border border-gray-700 p-4 flex flex-col gap-4 bg-black text-white w-full h-[529px] lg:h-[612px]">
+      <div className="flex items-center gap-2 text-sm">
+        
+        {isLargeScreen !== null && <GradeTag grade={tier} size={gradeSize} />}
+        <span className="text-700-18 text-gray-300 lg:text-700-24">| {safeSubLabel}</span>
+        {creator && <span className="ml-auto text-700-18 lg:text-700-24">{creator}</span>}
       </div>
 
-      {/* 설명 */}
-      <p className="text-400-16 leading-snug">{description}</p>
+      <hr className="border-gray-400" />
 
-      {/* 가격 및 잔여 */}
-      <div className="flex flex-col gap-1 text-sm">
-        {/* 가격 */}
+      <p className="text-400-16 h-[46px] leading-snug  lg:text-400-18">{description}</p>
+      <hr className="border-gray-400" />
+
+      <div className="flex flex-col h-[68px] gap-[10px] text-400-18 lg:text-400-20">
         <div className="flex justify-between">
-          <span>가격</span>
+          <span className="text-gray-300">가격</span>
           <span className="font-semibold">{pricePerCard}P</span>
         </div>
-
-        {/* 잔여 */}
         <div className="flex justify-between">
-          <span>잔여</span>
+          <span className="text-gray-300">잔여</span>
           <span className="font-semibold">
-            {remaining} / {total}
+            {remaining}
+            <span className="text-gray-300"> / {total}</span>
           </span>
         </div>
       </div>
+      <hr className="border-gray-400" />
 
-      {/* 수량 선택 */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-sm">구매수량</span>
-          <button
-            onClick={() => handleQuantity(-1)}
-            disabled={quantity <= 1}
-            aria-label="수량 감소"
-            className="border px-2 text-lg disabled:opacity-50"
-          >
-            -
-          </button>
-          <span>{quantity}</span>
-          <button
-            onClick={() => handleQuantity(1)}
-            disabled={quantity >= remaining}
-            aria-label="수량 증가"
-            className="border px-2 text-lg disabled:opacity-50"
-          >
-            +
-          </button>
-        </div>
-        <div className="text-sm">
-          <strong>{totalPrice}P</strong> ({quantity}장)
+        <div className="flex w-full h-[45px] justify-between items-center gap-2">
+          <span className="text-400-18 lg:text-400-20">구매수량</span>
+          <div className="w-[144px] text-400-18 h-full items-center flex justify-between border lg:text-400-20">
+            <button
+              onClick={() => handleQuantity(-1)}
+              disabled={quantity <= 1}
+              className="px-2 disabled:opacity-50"
+            >
+              <FaMinus />
+            </button>
+            <span>{quantity}</span>
+            <button
+              onClick={() => handleQuantity(1)}
+              disabled={quantity >= remaining}
+              className="px-2 disabled:opacity-50"
+            >
+              <FaPlus />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* 구매 버튼 */}
-      <button
+      <div className="flex justify-between items-center text-400-18 lg:text-400-20">
+        <span>총 가격</span>
+        <div>
+          <strong>{totalPrice} P</strong>
+          <span className="ml-1 text-gray-300">({quantity}장)</span>
+        </div>
+      </div>
+
+      <Button
         onClick={() => onBuy(quantity)}
         disabled={remaining === 0}
-        className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 w-full mt-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        className="h-[75px] mt-auto lg:h-[80px]"
       >
         {remaining === 0 ? "품절되었습니다" : "포토카드 구매하기"}
-      </button>
+      </Button>
     </div>
   );
 }
