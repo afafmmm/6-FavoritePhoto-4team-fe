@@ -27,6 +27,7 @@ export default function CardPostPage() {
     <>
       <PostTitle usingNumber="1" />
       <PostForm genres={meta.genres} grades={meta.grades} />
+      <StateModal />
     </>
   );
 }

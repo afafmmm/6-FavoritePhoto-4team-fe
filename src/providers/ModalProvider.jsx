@@ -15,7 +15,7 @@ export function ModalProvider({ children }) {
     isOpen: false,
     status: 200,
     type: "생성",
-    cardInfo: { genre: "", name: "", count: 1 },
+    cardInfo: { grade: "", name: "", count: 1 },
   });
 
   // 모달 열기
