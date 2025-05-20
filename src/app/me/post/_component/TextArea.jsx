@@ -1,4 +1,6 @@
 import React from "react";
+import ErrorText from "./ErrorText";
+import clsx from "clsx";
 
 export default function TextArea({
   label,
@@ -6,6 +8,7 @@ export default function TextArea({
   name,
   value,
   onChange,
+  error = "",
 }) {
   return (
     <div className="bg-transparent flex flex-col gap-2.5 w-full max-w-[345px] md:max-w-110 lg:max-w-130">
@@ -15,8 +18,12 @@ export default function TextArea({
         name={name}
         value={value}
         onChange={onChange}
-        className="border border-gray-200 rounded-[2px] px-5 py-[18px] w-full placeholder:text-gray-200  placeholder:text-300-14 lg:placeholder:text-300-16 focus:outline-none text-400-14 lg:text-400-16 resize-none h-[140px] lg:h-[180px]"
+        className={clsx(
+          error ? "border-my-red" : "border-gray-200",
+          "border rounded-[2px] px-5 py-[18px] w-full placeholder:text-gray-200  placeholder:text-300-14 lg:placeholder:text-300-16 focus:outline-none text-400-14 lg:text-400-16 resize-none h-[140px] lg:h-[180px]"
+        )}
       />
+      <ErrorText error={error} />
     </div>
   );
 }

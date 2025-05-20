@@ -29,6 +29,7 @@ export default function PostForm({ grades, genres }) {
     name: false,
     price: false,
     volumn: false,
+    description: false,
   }); // 입력 여부(오류 검사 때문에 만듦22)
 
   const { openModal } = useModal(); // 모달 provider
@@ -80,6 +81,10 @@ export default function PostForm({ grades, genres }) {
 
     if (!image) newError.image = "파일을 선택해 주세요.";
 
+    if (description.length > 60) {
+      newError.description = "설명은 60자 이내로 입력해 주세요.";
+    }
+
     const isFormValid = Object.keys(newError).length === 0;
     setErrors(newError);
     setIsValid(isFormValid);
@@ -89,7 +94,7 @@ export default function PostForm({ grades, genres }) {
 
   useEffect(() => {
     validate();
-  }, [name, grade, genre, price, volumn, image]);
+  }, [name, grade, genre, price, volumn, image, description]);
 
   // 제출 함수
   const handleSubmit = (e) => {
@@ -173,7 +178,8 @@ export default function PostForm({ grades, genres }) {
         name="description"
         placeholdrer="카드 설명을 입력해 주세요"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={handleChange(setDescription, "description")}
+        error={(isSubmitted || touched.description) && errors.description}
       />
       <Button type="exchangeGreen" disabled={!isValid}>
         생성하기
