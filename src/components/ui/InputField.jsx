@@ -23,7 +23,7 @@ function InputField({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full px-4 py-3 border border-gray-400 rounded bg-my-black text-white placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-white
+        className={`w-full h-[55px] lg:h-[60px] px-4 py-3 border border-gray-400 rounded bg-my-black text-white placeholder-gray-400 placeholder:text-300-14 placeholder:lg:text-300-16 focus:outline-none focus:ring-2 focus:ring-white
           ${
             isError
               ? "border border-red-500 focus:ring-red-500"
