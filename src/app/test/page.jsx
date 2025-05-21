@@ -72,10 +72,11 @@
 
 "use client";
 
-import React from "react";
-import example from "@/assets/example.svg";
-import BaseCard from "@/components/ui/BaseCard";
+import React, { useState } from "react";
+// import example from "@/assets/example.svg";
+// import BaseCard from "@/components/ui/BaseCard";
 import Button from "@/components/ui/Button";
+import MyCardModal from "@/components/CardSeller/MyCardModal";
 
 // const cardData = Array(15).fill({
 //   title: "How Far I'll Go",
@@ -112,36 +113,56 @@ import Button from "@/components/ui/Button";
 //   );
 // }
 
-export default function ExchangeCardList() {
-  const data = Array.from({ length: 15 });
+// export default function ExchangeCardList() {
+//   const data = Array.from({ length: 15 });
+
+//   return (
+//     <div className="max-w-[1240px] mx-auto px-1 py-10">
+//       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-5 lg:gap-10">
+//         {data.map((_, index) => (
+//           <BaseCard
+//             key={index}
+//             title="스페인 여행"
+//             image={example}
+//             grade="COMMON"
+//             category="풍경"
+//             owner="프로여행러"
+//             price="4"
+//             showPurchasePrice
+//           >
+//             <div className="space-y-4">
+//               <p className="text-400-10 md:text-400-16 text-gray-300">
+//                 스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고
+//                 싶습니다!
+//               </p>
+//               <div className="flex gap-2">
+//                 <Button type="reject" className="" />
+//                 <Button type="approve" className="" />
+//               </div>
+//             </div>
+//           </BaseCard>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+export default function MarketPage() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="max-w-[1240px] mx-auto px-1 py-10">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-5 lg:gap-10">
-        {data.map((_, index) => (
-          <BaseCard
-            key={index}
-            title="스페인 여행"
-            image={example}
-            grade="COMMON"
-            category="풍경"
-            owner="프로여행러"
-            price="4"
-            showPurchasePrice
-          >
-            <div className="space-y-4">
-              <p className="text-400-10 md:text-400-16 text-gray-300">
-                스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고
-                싶습니다!
-              </p>
-              <div className="flex gap-2">
-                <Button type="reject" className="" />
-                <Button type="approve" className="" />
-              </div>
-            </div>
-          </BaseCard>
-        ))}
-      </div>
+    <div className="min-h-screen bg-my-black text-white p-4">
+      {/* 임시 버튼 */}
+      <Button
+        type="purchase"
+        onClick={() => setOpen(true)}
+        className="w-full max-w-xs mx-auto"
+      >
+        나의 포토카드 판매하기
+      </Button>
+
+      {/* 모달 */}
+      <MyCardModal isOpen={open} onClose={() => setOpen(false)} />
     </div>
   );
 }
