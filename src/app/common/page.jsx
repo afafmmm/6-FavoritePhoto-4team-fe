@@ -44,6 +44,10 @@ import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
 import CardBuyer from "@/components/CardBuyer/CardBuyer";
+import NotiModal from "@/components/modal/NotiModal";
+import { useAlertModal } from "@/providers/AlertModalProvider";
+import StateModal from "@/components/modal/StateModal";
+import { useStateModal } from "@/providers/StateModalProvider";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -80,6 +84,21 @@ export default function CommonPage() {
     queryFn: () => sortMockData(mockdata, orderBy), // 함수 실행할 때도 조건 넣음
   });
 
+  const { openModal } = useAlertModal();
+  const { openModal: openStateModal } = useStateModal();
+
+  const handleNotiModalClick = () => {
+    openModal("교환 승인", { grade: "RARE", name: "짱짱 센 카드" }, () => {});
+  };
+
+  const handleStateModalClick = () => {
+    openStateModal(200, "생성", {
+      grade: "COMMON",
+      name: "이미지가 있는 카드",
+      count: 7,
+    });
+  };
+
   return (
     <div className="w-full">
       HomePage
@@ -104,7 +123,7 @@ export default function CommonPage() {
       })}
       <CardBuyer
         tier="COMMON"
-        subLabel="동물" 
+        subLabel="동물"
         creator="하이"
         description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요"
         pricePerCard={4}
@@ -112,10 +131,9 @@ export default function CommonPage() {
         total={5}
         onBuy={handleBuy}
       />
-
-       <CardBuyer
+      <CardBuyer
         tier="RARE"
-        subLabel="동물" 
+        subLabel="동물"
         creator="하이"
         description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요요요요요요요."
         pricePerCard={7}
@@ -187,6 +205,23 @@ export default function CommonPage() {
           <h2 className="text-xl text-white mb-4">Profile 컴포넌트 테스트</h2>
           <Profile />
         </div>
+      </div>
+      {/* 모달 사용하는 곳 */}
+      <div className="mb-30 flex justify-center gap-10">
+        <button
+          onClick={handleNotiModalClick}
+          className="bg-main text-my-black"
+        >
+          알림 모달 열기
+        </button>
+        <NotiModal />
+        <button
+          onClick={handleStateModalClick}
+          className="bg-main text-my-black"
+        >
+          성공/실패 모달 열기
+        </button>
+        <StateModal />
       </div>
     </div>
   );

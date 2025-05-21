@@ -18,12 +18,12 @@ export default function Sort({ onClick }) {
   }
 
   return (
-    <div ref={sortRef} className="w-[130px] md:w-[140px] lg:w-[180px] relative">
+    <div ref={sortRef} className="relative z-20">
       <button
         onClick={toggle}
-        className="rounded-[2px] w-full h-[50px] border-1 px-[20px] mb-[5px] border-gray-200 flex justify-between items-center bg-my-black cursor-pointer"
+        className="w-32 md:w-[140px] lg:w-44 lg:h-12 h-9 md:h-11 px-3.5 lg:px-5 py-2.5 lg:py-3 flex items-center justify-between border border-grey-200 rounded-xs cursor-pointer"
       >
-        <span className="text-400-12 md:text-400-14 lg:text-400-16">
+        <span className="text-400-12 md:text-400-14 lg:text-400-16 text-nowrap">
           {order}
         </span>
         <MdArrowDropDown
@@ -32,7 +32,7 @@ export default function Sort({ onClick }) {
       </button>
 
       {isOpen && (
-        <div className="rounded-[2px] w-full border-1 flex flex-col border-gray- bg-my-black200 gap-[15px] py-[15px] text-400-12 md:text-400-14 lg:text-400-16 absolute bg-my-black">
+        <div className="rounded-[2px] w-full border-1 flex flex-col  bg-my-black200 gap-[15px] py-[15px] text-400-12 md:text-400-14 lg:text-400-16 absolute mt-2 bg-my-black">
           {options.map((opt) => (
             <div
               key={opt}

@@ -1,16 +1,12 @@
-import HomeFallback from "@/components/skeletons/HomeFallback";
-import BaseCards from "@/components/ui/BaseCards";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
+import BaseCardsSection from "@/components/HompageComponents/BaseCardsSection";
 
 export default function HomePage() {
-  return ( 
-      <div>
-        {/* 카드 영역 */}
-        <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-20 ">
-          <Suspense fallback={<HomeFallback count={15}/>}>
-            <BaseCards />
-          </Suspense>
-        </div>
-      </div>
-  )
+  return (
+    <div className="md:py-[30px] lg:py-14">
+      <Suspense fallback={<div>로딩중...</div>}>
+        <BaseCardsSection />
+      </Suspense>
+    </div>
+  );
 }

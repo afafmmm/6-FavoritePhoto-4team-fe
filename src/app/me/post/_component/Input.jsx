@@ -14,9 +14,12 @@ export default function Input({
 }) {
   return (
     <div className="bg-transparent flex flex-col gap-2.5 w-full">
-      <label className="text-700-16 lg:text-700-20">{label}</label>
+      <label htmlFor={name} className="text-700-16 lg:text-700-20">
+        {label}
+      </label>
       <input
         type="text"
+        id={name}
         name={name}
         placeholder={placeholder}
         value={value}
