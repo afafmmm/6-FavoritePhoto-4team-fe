@@ -158,7 +158,7 @@ export default function MarketPage() {
         onClick={() => setOpen(true)}
         className="w-full max-w-xs mx-auto"
       >
-        나의 포토카드 판매하기
+        나의 포토카드 판매하기22222
       </Button>
 
       {/* 모달 */}
