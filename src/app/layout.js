@@ -13,12 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className="w-full">
-        <AppContainer>
-          <Header />
-          <main className="pb-20">
-            <Providers>{children}</Providers>
-          </main>
-        </AppContainer>
+        <Header />
+        <main className="pb-20  md:pb-0 pt-[60px] md:pt-[70px] lg:pt-20">
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );

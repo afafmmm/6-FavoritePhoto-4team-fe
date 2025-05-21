@@ -45,8 +45,14 @@ const Navbar = () => {
 
   return (
     <header>
-      <nav className="w-full bg-my-black sticky top-0 z-50 ">
-        <div className="h-14 px-5 md:px-10 md:h-20 lg:px-0 lg:py-[27px] flex items-center justify-between py-3  md:py-[23px]  mx-auto md:flex md:grid-cols-none md:items-center md:justify-between">
+      <nav className={"w-full bg-my-black top-0 z-50 fixed"}>
+        <div
+          className={`${
+            pathname === "/"
+              ? "max-w-[1920px] mx-auto h-[60px] md:h-[70px] lg:h-20 lg:py-[27px] lg:px-[60px] flex items-center justify-between px-5 py-[19px] md:py-[25px] md:px-10 lg:pt-[27px] lg:pb-[27.8px]"
+              : "max-w-[1480px] mx-auto h-[60px] md:h-[70px] lg:h-20 lg:py-[27px] lg:px-5 md:px-10 flex items-center justify-between px-5 py-3 md:py-[23px]"
+          }`}
+        >
           {/* 왼쪽: 햄버거 메뉴 또는 뒤로가기 (showBackHeader가 true면 모든 해상도에서 뒤로가기, 아니면 기존대로) */}
           <div
             className={`flex items-center min-w-[44px] justify-start${

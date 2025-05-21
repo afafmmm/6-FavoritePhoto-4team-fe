@@ -8,7 +8,7 @@ export default function AppContainer({ children }) {
   return (
     <div
       className={`mx-auto min-h-screen ${
-        isRoot ? "px-0 md:pr-5 md:pl-0" : "px-0"
+        isRoot ? "px-4 md:px-0" : "px-0"
       } max-w-[1480px]`}
     >
       {children}
