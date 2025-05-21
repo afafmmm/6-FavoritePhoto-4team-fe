@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import mainLogoImg from "@/assets/main-logo.png";
 import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
 import Notification from "./Notification";
@@ -43,7 +44,7 @@ const Navbar = () => {
   const pageTitle = pageNames[pathname] || "";
 
   return (
-    <>
+    <header>
       <nav className="bg-black w-full h-14 flex items-center justify-between px-4 py-3 md:h-20 md:px-[40px] md:py-[23px] lg:px-[220px] lg:py-[27px] md:flex md:grid-cols-none md:items-center md:justify-between fixed top-0 left-0 z-50">
         {/* 왼쪽: 햄버거 메뉴 또는 뒤로가기 (sm=기본, md 이상에서 숨김) */}
         <div className="flex items-center md:hidden min-w-[44px] justify-start">
@@ -124,7 +125,7 @@ const Navbar = () => {
         {/* 데스크탑 네비게이션: md 이상에서만 보임 */}
         <div className="hidden md:flex flex-1 justify-end items-center">
           {isLoggedIn ? (
-            <ul className="flex items-center space-x-[30px] text-white text-[14px]">
+            <ul className="flex items-center space-x-[30px] text-gray-200 text-[14px]">
               <li className="text-700-14 text-gray-200">
                 {user.point.toLocaleString()} P
               </li>
@@ -155,7 +156,7 @@ const Navbar = () => {
               </li>
             </ul>
           ) : (
-            <ul className="flex space-x-6 text-white text-[14px]">
+            <ul className="flex space-x-6 text-gray-200 text-[14px]">
               <li>
                 <Link href="/login" className="hover:text-gray-400">
                   로그인
@@ -174,7 +175,7 @@ const Navbar = () => {
       {menuOpen && (
         <CurtainMenu user={user} onClose={() => setMenuOpen(false)} />
       )}
-    </>
+    </header>
   );
 };
 

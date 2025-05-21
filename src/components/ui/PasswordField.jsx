@@ -31,7 +31,7 @@ function PasswordField({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-3 border border-gray-400 rounded bg-my-black text-white placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-white pr-10 ${
+          className={`w-full px-4 py-3 h-[55px] lg:h-[60px] border border-gray-400 rounded bg-my-black text-white placeholder-gray-400 placeholder:text-300-14 placeholder:lg:text-300-16 focus:outline-none focus:ring-2 focus:ring-white pr-10 ${
             isError
               ? "border border-red-500 focus:ring-red-500"
               : "border border-gray-400 focus:ring-white"

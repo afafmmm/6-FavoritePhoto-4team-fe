@@ -3,6 +3,7 @@ import LadingHeroSection from "@/components/landings/LandingHeroSection";
 import LandingNotificationFeatureSection from "@/components/landings/LandingNotificationFeatureSection";
 import LadingPointTradeSection from "@/components/landings/LandingPointTradeSection";
 import LandingRandomPointBoxSection from "@/components/landings/LandingRandomPointBoxSection";
+import Navbar from "@/components/layout/Header";
 import Header from "@/components/layout/Header";
 
 export default function RandingPage() {

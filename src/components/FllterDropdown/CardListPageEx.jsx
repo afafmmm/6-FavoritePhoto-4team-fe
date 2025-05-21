@@ -1,49 +1,75 @@
-'use client';
-import FillterDropdown from '@/components/FllterDropdown/FillterDropdown';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-
-// 테스트용 카드 데이터 
-const allCards = [
-  { id: 1, name: '카드 A', grade: 'COMMON' },
-  { id: 2, name: '카드 B', grade: 'RARE' },
-  { id: 3, name: '카드 C', grade: 'LEGENDARY' },
-  { id: 4, name: '카드 D', grade: 'SUPER RARE' },
-];
-//주석처리 지워용용
+"use client";
+import FillterDropdown from "@/components/FllterDropdown/FilterDropdown";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function CardListPageEx() {
-  // URL의 쿼리 파라미터를 가져오는 훅
   const searchParams = useSearchParams();
+  const gradeParam = searchParams.get("grade");
+  const genreParam = searchParams.get("genre"); 
+  const saleParam = searchParams.get("sale"); 
 
-  // 현재 선택된 필터 값 (등급)
-  const gradeParam = searchParams.get('grade');
+  const [allCards, setAllCards] = useState([]);
+  const [visibleCards, setVisibleCards] = useState([]);
 
-  // 보여줄 카드 리스트 상태
-  const [visibleCards, setVisibleCards] = useState(allCards);
-
-  // grade 쿼리 파라미터가 바뀔 때마다 카드 필터링
+  // 퍼블릭 폴더에서 카드 데이터 fetch
   useEffect(() => {
-    if (!gradeParam) {
-      // 전체 보기일 경우 모든 카드 표시
-      setVisibleCards(allCards);
-    } else {
-      // 특정 등급만 필터링
-      setVisibleCards(allCards.filter(card => card.grade === gradeParam));
+    fetch("/data/cards.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllCards(data);
+        setVisibleCards(data);
+      });
+  }, []);
+
+  // 쿼리 변경 시 필터링
+  useEffect(() => {
+    let filtered = allCards;
+
+    if (gradeParam) {
+      filtered = filtered.filter((card) => card.grade === gradeParam);
     }
-  }, [gradeParam]);
+
+    if (genreParam) {
+      filtered = filtered.filter((card) => card.category === genreParam);
+    }
+
+    if (saleParam) {
+      filtered = filtered.filter((card) => card.sale === saleParam);
+    }
+
+    setVisibleCards(filtered);
+  }, [gradeParam, genreParam, saleParam, allCards]);
 
   return (
     <div className="p-6 space-y-4">
       <FillterDropdown />
-      
-      <div className="grid grid-cols-2 gap-4">
-        {visibleCards.map(card => (
-          <div key={card.id} className="bg-gray-800 text-white p-4 rounded shadow">
-            {card.name} - {card.grade}
-          </div>
-        ))}
-      </div>
+
+      {/* 필터 조건에 맞는 카드가 없을 때 안내 메시지 */}
+      {visibleCards.length === 0 ? (
+        <p className="text-white text-center">조건에 맞는 카드가 없습니다.</p>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {visibleCards.map((card) => (
+            <div
+              key={card.id}
+              className="bg-gray-800 text-white p-4 rounded shadow"
+            >
+              <img
+                src={card.image}
+                alt={card.title}
+                className="w-full h-40 object-cover mb-2 rounded"
+              />
+              <p className="font-bold">{card.title}</p>
+              <p>등급: {card.grade}</p>
+              <p>카테고리: {card.category}</p>
+              <p>소유자: {card.owner}</p>
+              <p>가격: {card.price} 포인트</p>
+              <p>{card.amountLabel}: {card.amount}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

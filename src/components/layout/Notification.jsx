@@ -8,7 +8,7 @@ const testNotifications = [
   {
     id: 1,
     userId: 101,
-    message: "새로운 댓글이 달렸습니다.",
+    message: "기며누님이 [RARE | 우리집 앞마당]을 1장 구매했습니다.",
     createdAt: "2025-05-19T09:00:00Z",
     read: false,
   },
@@ -120,28 +120,28 @@ function Notification({ className = "", userId }) {
             }}
           >
             {notifications.length === 0 ? (
-              <li className="p-4 text-center text-gray-400">
+              <li className="p-5 text-center text-gray-400">
                 알림이 없습니다.
               </li>
             ) : (
               notifications.map((n) => (
                 <li
                   key={n.id}
-                  className={`w-full h-[107px] p-4 text-sm ${
+                  className={`w-full h-[107px] p-5 text-sm ${
                     n.read ? "bg-gray-500" : "bg-[#242424] text-white"
                   } cursor-pointer`}
                   onClick={() => !n.read && handleNotificationClick(n.id)}
                 >
                   <Link href="/notification" className="block h-full w-full">
-                    <div className="flex flex-col justify-center h-full">
+                    <div className="flex flex-col justify-between h-full">
                       <span
-                        className={`text-white ${
+                        className={`text-400-14 ${
                           n.read ? "opacity-70" : "font-semibold"
                         }`}
                       >
                         {n.message}
                       </span>
-                      <div className="text-xs text-gray-400 mt-2.5">
+                      <div className="text-xs text-gray-300 mt-2.5">
                         {getTimeAgo(n.createdAt)}
                       </div>
                     </div>

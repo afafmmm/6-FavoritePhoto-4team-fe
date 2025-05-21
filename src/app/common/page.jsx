@@ -34,7 +34,7 @@ const { data } = useQuery({
 "use client";
 import CardListPageEx from "@/components/FllterDropdown/CardListPageEx";
 import { Suspense, useState } from "react"; //useSearchParams를 사용해서 Suspense로 감싸야 안전하게 CSR 처리가 됩니다.
-
+import Profile from "@/components/ui/Profile";
 import Link from "next/link";
 import React from "react";
 import Sort from "@/components/ui/Sort";
@@ -43,7 +43,11 @@ import { Title } from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
 import StatusTag from "@/components/tag/StatusTag";
 import GradeTag from "@/components/tag/GradeTag";
-
+import CardBuyer from "@/components/CardBuyer/CardBuyer";
+import NotiModal from "@/components/modal/NotiModal";
+import { useAlertModal } from "@/providers/AlertModalProvider";
+import StateModal from "@/components/modal/StateModal";
+import { useStateModal } from "@/providers/StateModalProvider";
 
 const mockdata = [
   // 가데이터 ↔ DB에 저장된 데이터 (안 씀)
@@ -72,10 +76,28 @@ const sortMockData = (data, orderBy) => {
 export default function CommonPage() {
   const [orderBy, setOrderBy] = useState("price_asc"); // state 추가
 
+  const handleBuy = (qty) => {
+    alert(`구매 수량: ${qty}`);
+  };
   const { data = [] } = useQuery({
     queryKey: ["cards", orderBy], // 조건에 order 넣고
     queryFn: () => sortMockData(mockdata, orderBy), // 함수 실행할 때도 조건 넣음
   });
+
+  const { openModal } = useAlertModal();
+  const { openModal: openStateModal } = useStateModal();
+
+  const handleNotiModalClick = () => {
+    openModal("교환 승인", { grade: "RARE", name: "짱짱 센 카드" }, () => {});
+  };
+
+  const handleStateModalClick = () => {
+    openStateModal(200, "생성", {
+      grade: "COMMON",
+      name: "이미지가 있는 카드",
+      count: 7,
+    });
+  };
 
   return (
     <div className="w-full">
@@ -99,6 +121,26 @@ export default function CommonPage() {
       {data?.map((data) => {
         return <div key={data.id}>{data.name}</div>;
       })}
+      <CardBuyer
+        tier="COMMON"
+        subLabel="동물"
+        creator="하이"
+        description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요"
+        pricePerCard={4}
+        remaining={2}
+        total={5}
+        onBuy={handleBuy}
+      />
+      <CardBuyer
+        tier="RARE"
+        subLabel="동물"
+        creator="하이"
+        description="귀여운 동물 포토카드입니다. 어디까지 보이는거에요요요요요요요요요요요요요요요요요요요요요."
+        pricePerCard={7}
+        remaining={8}
+        total={8}
+        onBuy={handleBuy}
+      />
       {/* Button 컴포넌트 테스트 섹션 - Button.jsx에 정의된 type 사용 */}
       <div className="mt-8 p-4 border-t border-gray-700">
         <h2 className="text-xl text-white mb-4">
@@ -158,6 +200,28 @@ export default function CommonPage() {
           <GradeTag grade="LEGENDARY" size="lg" />
           <GradeTag grade="LEGENDARY" size="xl" />
         </div>
+        {/* Profile 컴포넌트 테스트 섹션 */}
+        <div className="mt-8 p-4 border-t border-gray-700">
+          <h2 className="text-xl text-white mb-4">Profile 컴포넌트 테스트</h2>
+          <Profile />
+        </div>
+      </div>
+      {/* 모달 사용하는 곳 */}
+      <div className="mb-30 flex justify-center gap-10">
+        <button
+          onClick={handleNotiModalClick}
+          className="bg-main text-my-black"
+        >
+          알림 모달 열기
+        </button>
+        <NotiModal />
+        <button
+          onClick={handleStateModalClick}
+          className="bg-main text-my-black"
+        >
+          성공/실패 모달 열기
+        </button>
+        <StateModal />
       </div>
     </div>
   );
