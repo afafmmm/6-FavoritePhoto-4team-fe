@@ -104,7 +104,7 @@ export default function CardBuyer({
       <Button
         onClick={() => onBuy(quantity)}
         disabled={remaining === 0}
-        className="h-[75px] mt-auto lg:h-[80px]"
+        className="h-[75px]  lg:h-[80px]"
       >
         {remaining === 0 ? "품절되었습니다" : "포토카드 구매하기"}
       </Button>

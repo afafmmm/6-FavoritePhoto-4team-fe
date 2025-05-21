@@ -110,7 +110,7 @@ export default function FillterDropdown() {
       {isBottomSheetOpen && !isSmOrLarger && (
         <>
           <div
-            className="fixed inset-0 bg-black z-30"
+            className="fixed inset-0 bg-black z-80"
             style={{ opacity: 0.5 }}
             onClick={() => setIsBottomSheetOpen(false)}
           />
