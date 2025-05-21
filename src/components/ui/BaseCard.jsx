@@ -9,7 +9,7 @@ export default function BaseCard({
   title,
   image,
   grade,
-  category,
+  genre,
   owner,
   price,
   amount,
@@ -17,6 +17,7 @@ export default function BaseCard({
   isFavorite = false,
   children, // 설명이나 버튼 등 option
   showPurchasePrice = false, // "4P에 구매" option
+  sale
 }) {
   // '잔여'일 경우 스타일 분리
   const optionAmount = () => {
@@ -76,7 +77,7 @@ export default function BaseCard({
           </div>
 
           <span className="text-gray-400">|</span>
-          <span className="text-gray-300">{category}</span>
+          <span className="text-gray-300">{genre}</span>
 
           {/* lg: 4P에 구매, owner를 같은 줄에 표시 */}
           <div className="hidden lg:flex items-center gap-1.5">

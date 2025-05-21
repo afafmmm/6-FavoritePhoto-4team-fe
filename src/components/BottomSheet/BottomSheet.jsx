@@ -38,7 +38,7 @@ export default function BottomSheet({ onClose }) {
     async function fetchAllAndCount() {
       try {
         setLoading(true);
-        const res = await fetch("/api/mock");
+        const res = await fetch("/data/cards.json");
         const allData = await res.json();
 
         setCounts({
@@ -103,7 +103,7 @@ export default function BottomSheet({ onClose }) {
   };
 
   return (
-    <div className="fixed flex flex-col justify-between bottom-0 left-0 w-full h-120 bg-[#1B1B1B] text-white p-4 z-90 border-t border-gray-700 rounded-t-2xl max-h-[70vh] overflow-auto">
+    <div className="fixed flex flex-col justify-between bottom-0 left-0 w-full h-120 bg-[#1B1B1B] text-white p-4 z-9000 border-t border-gray-700 rounded-t-2xl max-h-[70vh] overflow-auto">
       <div>
         <div className="relative text-center">
           <p className="text-lg font-bold text-400-16 text-gray-400">필터</p>

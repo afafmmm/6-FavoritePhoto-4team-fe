@@ -1,4 +1,3 @@
-// src/components/ui/BaseCardList.tsx
 'use client';
 
 import BaseCard from './BaseCard';
