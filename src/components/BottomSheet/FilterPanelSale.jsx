@@ -9,11 +9,24 @@ export default function FilterPanelSale({
   selectedSale,
   onSelectSale,
 }) {
+  // 카운트 합산 함수
+  const getCount = (key) => {
+    if (key === "onSale") {
+      return (sales["onSale"] || 0) + (sales["판매중"] || 0);
+    }
+    if (key === "soldOut") {
+      return (sales["soldOut"] || 0) + (sales["판매완료"] || 0);
+    }
+    return sales[key] || 0;
+  };
+
   return (
     <ul>
       {saleKeys.map((key) => {
-        const count = sales[key] || 0;
-        const isSelected = selectedSale === key;
+        const count = getCount(key);
+        const label = saleLabels[key];
+        const isSelected = selectedSale === key || selectedSale === label;
+
         return (
           <li
             key={key}
@@ -22,10 +35,18 @@ export default function FilterPanelSale({
             }`}
             onClick={() => onSelectSale(key)}
           >
-            <span className={isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"}>
-              {saleLabels[key]}
+            <span
+              className={
+                isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"
+              }
+            >
+              {label}
             </span>
-            <span className={isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"}>
+            <span
+              className={
+                isSelected ? "text-white text-400-14" : "text-gray-300 text-400-14"
+              }
+            >
               {count}개
             </span>
           </li>
