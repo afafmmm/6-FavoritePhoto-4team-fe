@@ -1,7 +1,7 @@
 import "./globals.css";
 
 import Header from "@/components/layout/Header";
-import Providers from "./providers";
+import Providers from "../providers/providers";
 
 export const metadata = {
   title: "최애의 포토",
