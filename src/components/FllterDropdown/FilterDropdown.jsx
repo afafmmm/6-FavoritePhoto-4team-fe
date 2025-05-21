@@ -1,8 +1,5 @@
 "use client";
 
-/*
- <FilterDropdown iconSize={45} /> 이렇게 쓰면 아이콘이 45px로 나와여
-*/
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
@@ -74,7 +71,7 @@ export default function FilterDropdown({ iconSize = 35 }) {
   };
 
   return (
-    <div className="flex gap-4 items-center relative w-full" ref={dropdownRef}>
+    <div className="flex gap-4 items-center relative w-full md:ml-8 lg:ml-12" ref={dropdownRef}>
       {/* 데스크톱 드롭다운 버튼들 */}
       {["grade", "genre", "sale"].map((type) => (
         <div key={type} className="relative hidden md:block">
@@ -82,14 +79,14 @@ export default function FilterDropdown({ iconSize = 35 }) {
             onClick={() =>
               setOpenFilter((prev) => (prev === type ? null : type))
             }
-            className={`flex justify-between items-center h-[22px] lg:h-[24px] text-white border-none md:text-700-14 lg:text-700-16 cursor-pointer ${buttonWidths[type]}`}
+            className={`flex justify-center md:gap-3 lg:gap-3.5  items-center h-[22px] lg:h-[24px] text-white border-none md:text-700-14 lg:text-700-16 cursor-pointer `}
           >
             <span>
-              {type === "grade"
-                ? "등급"
-                : type === "genre"
-                ? "장르"
-                : "매진여부"}
+              {{
+                grade: searchParams.get("grade") || "등급",
+                genre: searchParams.get("genre") || "장르",
+                sale: searchParams.get("sale") || "매진여부",
+              }[type]}
             </span>
             {openFilter === type ? (
               <GoTriangleUp className="ml-1" />

@@ -1,12 +1,5 @@
-import React, { Suspense } from "react";
-import BaseCardsSection from "@/components/HompageComponents/BaseCardsSection";
+import HomePage from "@/components/ui/HomePage";
 
-export default function HomePage() {
-  return (
-    <div className="md:py-[30px] lg:py-14">
-      <Suspense fallback={<div>로딩중...</div>}>
-        <BaseCardsSection />
-      </Suspense>
-    </div>
-  );
+export default function Page({ searchParams }) {
+  return <HomePage searchParams={searchParams} />;
 }

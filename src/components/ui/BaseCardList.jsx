@@ -1,8 +1,6 @@
-'use client';
-
 import BaseCard from './BaseCard';
 
-export default function BaseCardList({ cards }) {
+export default async function BaseCardList({ cards }) {
   return (
     <>
       {cards.map((card, index) => (
