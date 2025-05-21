@@ -111,9 +111,9 @@ function Notification({ className = "", userId }) {
 
       {/* 드롭다운: md 이상에서만 보임 */}
       {open && (
-        <div className="hidden md:block absolute top-full right-0 mt-0 w-[300px] h-[535px] rounded-xs z-20 bg-black text-white ">
+        <div className="hidden md:block absolute top-full right-0 mt-0 w-[300px] max-h-[535px] rounded-xs z-20 bg-my-black text-white ">
           <ul
-            className="h-full max-h-full overflow-y-auto divide-y divide-gray-600"
+            className="max-h-[535px] h-auto overflow-y-auto divide-y divide-gray-600"
             style={{
               scrollbarWidth: "thin",
               scrollbarColor: "rgba(120,120,120,0.3) transparent",
@@ -128,7 +128,7 @@ function Notification({ className = "", userId }) {
                 <li
                   key={n.id}
                   className={`w-full h-[107px] p-5 text-sm ${
-                    n.read ? "bg-gray-500" : "bg-[#242424] text-white"
+                    n.read ? "bg-gray-500" : "bg-my-black text-white"
                   } cursor-pointer`}
                   onClick={() => !n.read && handleNotificationClick(n.id)}
                 >
