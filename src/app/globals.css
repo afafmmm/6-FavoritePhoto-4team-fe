@@ -78,33 +78,6 @@ body {
   font-family: "noto", "Baskin", serif;
 }
 
-/* 모달 슬라이드 애니메이션 */
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0%);
-  }
-}
-
-@keyframes slide-down {
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-@utility animate-slide-up {
-  animation: slide-up 0.3s ease-out forwards;
-}
-
-@utility animate-slide-down {
-  animation: slide-down 0.3s ease-in forwards;
-}
-
 @utility title-62 {
   font: 700 3.875rem "baskin", serif;
   letter-spacing: -0.03rem;
@@ -120,18 +93,8 @@ body {
   letter-spacing: -0.03rem;
 }
 
-@utility title-46-1 {
-  font: 400 2.875rem "baskin", serif;
-  letter-spacing: -0.03rem;
-}
-
 @utility title-40 {
   font: 700 2.5rem "baskin", serif;
-  letter-spacing: -0.03rem;
-}
-
-@utility title-40-1 {
-  font: 400 2.5rem "baskin", serif;
   letter-spacing: -0.03rem;
 }
 
@@ -157,16 +120,6 @@ body {
 
 @utility title-18 {
   font: 700 1.125rem "baskin", serif;
-  letter-spacing: -0.03rem;
-}
-
-@utility title-16 {
-  font: 400 1rem "baskin", serif;
-  letter-spacing: -0.03rem;
-}
-
-@utility title-14 {
-  font: 400 0.8755rem "baskin", serif;
   letter-spacing: -0.03rem;
 }
 
