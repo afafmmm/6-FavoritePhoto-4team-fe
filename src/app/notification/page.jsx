@@ -93,9 +93,9 @@ export default function NotificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col px-0 max-w-[1480px] mx-auto">
+    <div className="min-h-screen bg-my-black text-white flex flex-col px-0">
       {/* 알림 리스트 */}
-      <ul className="flex-1 overflow-y-auto divide-y divide-gray-700">
+      <ul className="flex-1 overflow-y-auto divide-y divide-my-black">
         {notifications.length === 0 ? (
           <li className="p-8 text-center text-gray-400">알림이 없습니다.</li>
         ) : (
