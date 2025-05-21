@@ -78,6 +78,10 @@ body {
   font-family: "noto", "Baskin", serif;
 }
 
+* a, * button {
+  cursor : pointer;  
+}
+
 @utility title-62 {
   font: 700 3.875rem "baskin", serif;
   letter-spacing: -0.03rem;

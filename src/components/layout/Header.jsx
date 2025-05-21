@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import mainLogoImg from "@/assets/main-logo.png";
+import alarmIconImg from "@/assets/icon-alarm.png";
+import humbergerIconImg from "@/assets/icon-humberger.png";
 import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
 import { usePathname } from "next/navigation";
@@ -36,8 +38,8 @@ const Navbar = () => {
         {/* 왼쪽: 햄버거 메뉴 (sm=기본, md 이상에서 숨김) */}
         <div className="flex items-center md:hidden">
           <button type="button" onClick={() => setMenuOpen(true)}>
-            <img
-              src="/img/icon_menu.svg"
+            <Image
+              src={humbergerIconImg}
               alt="메뉴"
               className="w-[22px] h-[22px]"
             />
@@ -53,8 +55,8 @@ const Navbar = () => {
         {/* 오른쪽: 알림 또는 로그인 (sm에서만 보임) */}
         <div className="flex items-center justify-end md:hidden">
           {isLoggedIn ? (
-            <img
-              src="/img/icon_alarm.svg"
+            <Image
+              src={alarmIconImg}
               alt="알림"
               className="w-[22px] h-[22px]"
             />
@@ -75,8 +77,8 @@ const Navbar = () => {
                 {user.point.toLocaleString()} P
               </li>
               <li>
-                <img
-                  src="/img/icon_alarm.svg"
+                <Image
+                  src={alarmIconImg}
                   alt="알림"
                   className="w-6 h-6"
                   style={{ width: 24, height: 24 }}
