@@ -23,6 +23,7 @@ export default function CardPostPage() {
 
   if (isPending) return <p>로딩 중입니다...</p>;
   if (isError) return <p>데이터를 불러오는 데 실패했습니다.</p>;
+
   return (
     <>
       <PostTitle usingNumber="1" />

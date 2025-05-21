@@ -14,7 +14,12 @@ export default function Search({ onSearch }) {
   };
 
   return (
-    <div className="relative w-[345px] h-[45px] md:w-[200px] md:h-[45px] lg:w-[320px] lg:h-[50px]">
+    <div 
+    className="
+      w-full lg:w-80 h-11 lg:h-12 px-5 py-2.5
+      flex items-center 
+      border border-gray-200 rounded-xs
+    ">
       <input
         type="text"
         value={keyword}

@@ -2,14 +2,17 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
-import { ModalProvider } from "./ModalProvider";
+import { StateModalProvider } from "./StateModalProvider";
+import { AlertModalProvider } from "./AlertModalProvider";
 
 const queryClient = new QueryClient();
 
 function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ModalProvider>{children}</ModalProvider>
+      <AlertModalProvider>
+        <StateModalProvider>{children}</StateModalProvider>
+      </AlertModalProvider>
     </QueryClientProvider>
   );
 }

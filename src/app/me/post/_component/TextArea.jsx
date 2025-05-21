@@ -12,9 +12,12 @@ export default function TextArea({
 }) {
   return (
     <div className="bg-transparent flex flex-col gap-2.5 w-full max-w-[345px] md:max-w-110 lg:max-w-130">
-      <label className="text-700-16 lg:text-700-20">{label}</label>
+      <label htmlFor={name} className="text-700-16 lg:text-700-20">
+        {label}
+      </label>
       <textarea
         placeholder={placeholdrer}
+        id={name}
         name={name}
         value={value}
         onChange={onChange}

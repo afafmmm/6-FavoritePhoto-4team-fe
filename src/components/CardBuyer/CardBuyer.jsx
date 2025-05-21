@@ -42,7 +42,7 @@ export default function CardBuyer({
   const gradeSize = isLargeScreen ? "xl" : "lg";
 
   return (
-    <div className="border border-gray-700 p-4 flex flex-col gap-4 bg-black text-white w-full h-[529px] lg:h-[612px]">
+    <div className=" p-4 flex flex-col gap-4  text-white w-full h-[529px] lg:h-[612px]">
       <div className="flex items-center gap-2 text-sm">
         
         {isLargeScreen !== null && <GradeTag grade={tier} size={gradeSize} />}
@@ -104,7 +104,7 @@ export default function CardBuyer({
       <Button
         onClick={() => onBuy(quantity)}
         disabled={remaining === 0}
-        className="h-[75px] mt-auto lg:h-[80px]"
+        className="h-[75px]  lg:h-[80px]"
       >
         {remaining === 0 ? "품절되었습니다" : "포토카드 구매하기"}
       </Button>

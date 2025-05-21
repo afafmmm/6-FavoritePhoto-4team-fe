@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import Link from "next/link";
 
 const CurtainMenu = ({ user, onClose }) => (
   <div className="fixed inset-0 z-50 bg-black/80 flex">
@@ -14,28 +16,34 @@ const CurtainMenu = ({ user, onClose }) => (
       </div>
       <hr className="border-gray-400 mb-4 w-full" />
       <nav className="flex flex-col gap-4 ml-5">
-        <a
+        <Link
           href="/marketplace"
           className="text-700-14 text-white hover:text-main"
         >
           마켓플레이스
-        </a>
-        <a href="/mygallery" className="text-700-14 text-white hover:text-main">
+        </Link>
+        <Link
+          href="/mygallery"
+          className="text-700-14 text-white hover:text-main"
+        >
           마이갤러리
-        </a>
-        <a href="/selling" className="text-700-14 text-white hover:text-main">
+        </Link>
+        <Link
+          href="/selling"
+          className="text-700-14 text-white hover:text-main"
+        >
           판매 중인 포토카드
-        </a>
+        </Link>
       </nav>
-      <a
+      <Link
         href="/logout"
         className="text-400-14 text-gray-400  ml-5 mt-auto mb-[43px]"
         style={{ display: "block" }}
       >
         로그아웃
-      </a>
+      </Link>
     </div>
-    <div className="flex-1 cursor-pointer" onClick={onClose} />
+    <div className="flex-1 cursor-pointer" onClick={onClose}></div>
   </div>
 );
 
