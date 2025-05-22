@@ -27,7 +27,7 @@ const Navbar = () => {
   }, [pathname])
 
   return (
-    <header className="sticky top-0 left-0 z-[7777]  bg-my-black">
+    <header className="sticky top-0 left-0 z-[7777] bg-my-black">
       <nav 
       className={`
           flex items-center 
