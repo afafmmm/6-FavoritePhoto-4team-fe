@@ -11,13 +11,13 @@ import { useFilterQuery } from "@/lib/api/api-bottomfilter";
 import { IoClose } from "react-icons/io5";
 import { RiResetLeftFill } from "react-icons/ri";
 
+// 🔧 filters 프롭 추가: 기본값은 모든 필터
 export default function BottomSheet({ onClose, filters = ["grade", "genre", "sale", "method"] }) {
   const [selectedTab, setSelectedTab] = useState(filters[0] || "grade");
   const [selectedGrades, setSelectedGrades] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedSale, setSelectedSale] = useState(null);
   const [selectedMethods, setSelectedMethods] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [counts, setCounts] = useState({
     grade: {},
@@ -25,9 +25,9 @@ export default function BottomSheet({ onClose, filters = ["grade", "genre", "sal
     sale: {},
     method: {},
   });
-
   const [filteredCount, setFilteredCount] = useState(0);
 
+  // 🔑 필터 상태 메모
   const currentFilter = useMemo(
     () => ({
       grade: selectedGrades.length > 0 ? selectedGrades : null,
@@ -40,11 +40,12 @@ export default function BottomSheet({ onClose, filters = ["grade", "genre", "sal
 
   const { refetch } = useFilterQuery(currentFilter);
 
+  // 최초 필터 옵션 개수 가져오기
   useEffect(() => {
     async function fetchAllAndCount() {
       try {
         setLoading(true);
-        const res = await fetch("/data/cards.json"); // 실제 데이터 경로에 맞게 수정하세요
+        const res = await fetch("/data/cards.json");
         const allData = await res.json();
 
         setCounts({
@@ -62,6 +63,7 @@ export default function BottomSheet({ onClose, filters = ["grade", "genre", "sal
     fetchAllAndCount();
   }, []);
 
+  // 필터 적용 시 결과 개수 업데이트
   useEffect(() => {
     async function fetchFiltered() {
       try {
@@ -123,6 +125,7 @@ export default function BottomSheet({ onClose, filters = ["grade", "genre", "sal
           </button>
         </div>
 
+        {/* 🔧 선택된 필터 탭만 전달 */}
         <FilterTab selected={selectedTab} onChange={setSelectedTab} filters={filters} />
 
         {selectedTab === "grade" && filters.includes("grade") && (

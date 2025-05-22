@@ -1,24 +1,28 @@
+import BaseCardList from "../ui/BaseCardList";
 import FilterDropdown from "../FllterDropdown/FilterDropdown";
 import Search from "../ui/Search";
 import Sort from "../ui/Sort";
-import SellButton from "../ui/SellButton";
-import { Suspense } from "react";
-import HomeFallback from "../skeletons/HomeFallback"; // 너가 만든 스켈레톤 컴포넌트
-import FilteredCardList from "../ui/FilterCardList";
 
-export default function BaseCardsSection() {
+export default async function BaseCardsSection({ grade, genre, sale }) {
+  const apiUrl = "http://localhost:3002/api/store";
+
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    throw new Error("카드 데이터를 불러오는데 실패했습니다.");
+  }
+  const data = await res.json();
+
+  // 필터링 : grade, genre는 id 값으로 필터링 (문자면 숫자 변환 필요)
+  const filtered = data.filter((card) => {
+    const matchGrade = !grade || card.gradeId === Number(grade);
+    const matchGenre = !genre || card.genreId === Number(genre);
+    const matchSale = !sale || (sale === "판매중" ? card.sale === "판매중" : card.sale === "판매완료");
+
+    return matchGrade && matchGenre && matchSale;
+  });
+
   return (
     <>
-      {/* 헤더 */}
-      <div className="flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <h2 className="hidden md:block title-48 lg:title-62">마켓플레이스</h2>
-          <SellButton />
-        </div>
-        <div className="hidden md:block w-full h-0.5 bg-gray-100" />
-      </div>
-
-      {/* 검색 & 필터 & 정렬 */}
       <div className="py-5">
         <div className="flex flex-col gap-4">
           <div className="md:hidden">
@@ -30,15 +34,14 @@ export default function BaseCardsSection() {
           <div className="hidden md:block">
             <Search />
           </div>
-          <FilterDropdown />
+          <FilterDropdown visibleFilters={["grade", "genre", "sale"]} />
           <Sort />
         </div>
       </div>
 
-      {/* 카드 Suspense 처리 */}
-      <Suspense fallback={<HomeFallback  />}>
-        <FilteredCardList />
-      </Suspense>
+      <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-20">
+        <BaseCardList cards={filtered} />
+      </div>
     </>
   );
 }

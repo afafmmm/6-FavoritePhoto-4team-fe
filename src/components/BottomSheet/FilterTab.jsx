@@ -1,13 +1,16 @@
-export default function FilterTab({ selected, onChange }) {
-  const tabs = [
+export default function FilterTab({ selected, onChange, filters }) {
+  const allTabs = [
     { key: "grade", label: "등급" },
     { key: "genre", label: "장르" },
     { key: "sale", label: "매진 여부" },
   ];
 
+  // filters 배열에 포함된 탭만 사용
+  const visibleTabs = allTabs.filter((tab) => filters.includes(tab.key));
+
   return (
-    <div className="flex justify-start border-b border-gray-700 mb-4 gap-4 ">
-      {tabs.map((tab, index) => (
+    <div className="flex justify-start border-b border-gray-700 mb-4 gap-4">
+      {visibleTabs.map((tab, index) => (
         <button
           key={tab.key}
           onClick={() => onChange(tab.key)}
