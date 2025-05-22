@@ -1,4 +1,5 @@
-import { baseUrl } from "./fetch-client";
+// import { baseUrl } from "./fetch-client";
+import { cookieFetch } from "./fetch-client";
 
 // 장르 + 등급 get
 export async function getCardMeta() {
@@ -24,3 +25,7 @@ export async function postCard(formData) {
 
   return res.json();
 }
+
+export const userService = {
+  getMe: () => cookieFetch("/api/users"),
+};
