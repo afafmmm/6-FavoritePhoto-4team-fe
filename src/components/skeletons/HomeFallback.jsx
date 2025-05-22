@@ -2,7 +2,7 @@ import React from "react";
 
 export default function HomeFallback() {
   return (
-    <>
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-20">
       {Array.from({ length: 12 }).map((_, index) => (
         <div
           key={index}
@@ -57,6 +57,6 @@ export default function HomeFallback() {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }

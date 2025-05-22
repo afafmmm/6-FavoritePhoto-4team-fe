@@ -1,24 +1,36 @@
+import fs from "fs/promises";
+import path from "path";
+
+import BaseCardList from "../ui/BaseCardList";
 import FilterDropdown from "../FllterDropdown/FilterDropdown";
 import Search from "../ui/Search";
 import Sort from "../ui/Sort";
-import SellButton from "../ui/SellButton";
-import { Suspense } from "react";
-import HomeFallback from "../skeletons/HomeFallback"; // 너가 만든 스켈레톤 컴포넌트
-import FilteredCardList from "../ui/FilterCardList";
+import { delay } from "@/delay";
 
-export default function BaseCardsSection() {
+export default async function BaseCardsSection({ grade, genre, sale }) {
+  // 의도된 딜레이 (예: 로딩 시뮬레이션)
+  await delay(3000);
+
+  // 파일 경로
+  const filePath = path.join(process.cwd(), "public/data/cards.json");
+  // JSON 파일 읽기
+  const jsonData = await fs.readFile(filePath, "utf-8");
+  // JSON 파싱
+  const data = JSON.parse(jsonData);
+
+  // 필터링 (grade, genre, sale 조건 적용)
+  const filtered = data.filter((card) => {
+    const matchGrade = !grade || card.grade === grade;
+    const matchGenre = !genre || card.genre === genre;
+    const matchSale =
+      !sale || (sale === "판매중" ? card.sale === "판매중" : card.sale === "판매완료");
+
+    return matchGrade && matchGenre && matchSale;
+  });
+
   return (
     <>
-      {/* 헤더 */}
-      <div className="flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <h2 className="hidden md:block title-48 lg:title-62">마켓플레이스</h2>
-          <SellButton />
-        </div>
-        <div className="hidden md:block w-full h-0.5 bg-gray-100" />
-      </div>
-
-      {/* 검색 & 필터 & 정렬 */}
+      {/* 검색 & 필터 & 정렬 UI */}
       <div className="py-5">
         <div className="flex flex-col gap-4">
           <div className="md:hidden">
@@ -30,15 +42,15 @@ export default function BaseCardsSection() {
           <div className="hidden md:block">
             <Search />
           </div>
-          <FilterDropdown />
+          <FilterDropdown visibleFilters={["grade", "genre", "method", "sale"]} />
           <Sort />
         </div>
       </div>
 
-      {/* 카드 Suspense 처리 */}
-      <Suspense fallback={<HomeFallback  />}>
-        <FilteredCardList />
-      </Suspense>
+      {/* 카드 리스트 출력 */}
+      <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-20">
+        <BaseCardList cards={filtered} />
+      </div>
     </>
   );
 }
