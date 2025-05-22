@@ -55,7 +55,7 @@ export default function PhotoBuyerSection({ photo }) {
         <CardBuyer
           tier={tierMap[photo.gradeId] || "COMMON"}
           subLabel={genreMap[photo.genreId] || "풍경"}
-          creator={photo.creatorId}
+          creator={photo.name}
           description={photo.description}
           pricePerCard={photo.initialPrice}
           remaining={photo.totalQuantity}
@@ -65,7 +65,7 @@ export default function PhotoBuyerSection({ photo }) {
       </div>
       <Title
         title="교환 희망 정보"
-        buttonText={isMd ? "포토카드 교환하기기" : undefined}
+        buttonText={isMd ? "포토카드 교환하기" : undefined}
         font="titleLg_Noto"
       />
     </section>

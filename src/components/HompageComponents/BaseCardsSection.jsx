@@ -34,7 +34,7 @@ export default async function BaseCardsSection({ grade, genre, sale }) {
           <div className="hidden md:block">
             <Search />
           </div>
-          <FilterDropdown visibleFilters={["grade", "genre", "method", "sale"]} />
+          <FilterDropdown visibleFilters={["grade", "genre", "sale"]} />
           <Sort />
         </div>
       </div>
