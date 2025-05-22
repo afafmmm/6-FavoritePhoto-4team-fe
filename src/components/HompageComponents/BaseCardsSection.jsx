@@ -1,36 +1,28 @@
-import fs from "fs/promises";
-import path from "path";
-
 import BaseCardList from "../ui/BaseCardList";
 import FilterDropdown from "../FllterDropdown/FilterDropdown";
 import Search from "../ui/Search";
 import Sort from "../ui/Sort";
-import { delay } from "@/delay";
 
 export default async function BaseCardsSection({ grade, genre, sale }) {
-  // 의도된 딜레이 (예: 로딩 시뮬레이션)
-  await delay(3000);
+  const apiUrl = "http://localhost:3002/api/store";
 
-  // 파일 경로
-  const filePath = path.join(process.cwd(), "public/data/cards.json");
-  // JSON 파일 읽기
-  const jsonData = await fs.readFile(filePath, "utf-8");
-  // JSON 파싱
-  const data = JSON.parse(jsonData);
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    throw new Error("카드 데이터를 불러오는데 실패했습니다.");
+  }
+  const data = await res.json();
 
-  // 필터링 (grade, genre, sale 조건 적용)
+  // 필터링 : grade, genre는 id 값으로 필터링 (문자면 숫자 변환 필요)
   const filtered = data.filter((card) => {
-    const matchGrade = !grade || card.grade === grade;
-    const matchGenre = !genre || card.genre === genre;
-    const matchSale =
-      !sale || (sale === "판매중" ? card.sale === "판매중" : card.sale === "판매완료");
+    const matchGrade = !grade || card.gradeId === Number(grade);
+    const matchGenre = !genre || card.genreId === Number(genre);
+    const matchSale = !sale || (sale === "판매중" ? card.sale === "판매중" : card.sale === "판매완료");
 
     return matchGrade && matchGenre && matchSale;
   });
 
   return (
     <>
-      {/* 검색 & 필터 & 정렬 UI */}
       <div className="py-5">
         <div className="flex flex-col gap-4">
           <div className="md:hidden">
@@ -47,7 +39,6 @@ export default async function BaseCardsSection({ grade, genre, sale }) {
         </div>
       </div>
 
-      {/* 카드 리스트 출력 */}
       <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-20">
         <BaseCardList cards={filtered} />
       </div>

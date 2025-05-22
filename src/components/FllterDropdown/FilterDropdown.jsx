@@ -1,17 +1,65 @@
 "use client";
 
+/*
+사용방법
+
+<FilterDropdown visibleFilters={["grade", "genre", "method", "sale"]} />
+
+*/
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import { GiSettingsKnobs } from "react-icons/gi";
 import BottomSheet from "../BottomSheet/BottomSheet";
 
-const grades = ["전체", "COMMON", "RARE", "SUPER RARE", "LEGENDARY"];
-const genres = ["전체", "여행", "풍경", "인물", "사물"];
-const sales = ["전체", "판매중", "판매완료"];
-const methods = ["전체", "교환중", "교환완료료"];
+const grades = [
+  { id: 0, label: "전체" },
+  { id: 1, label: "COMMON" },
+  { id: 2, label: "RARE" },
+  { id: 3, label: "SUPER RARE" },
+  { id: 4, label: "LEGENDARY" },
+];
 
-export default function FilterDropdown({ iconSize = 35, visibleFilters = ["grade", "genre", "sale", "method"] }) {
+const genres = [
+  { id: 0, label: "전체" },
+  { id: 1, label: "여행" },
+  { id: 2, label: "풍경" },
+  { id: 3, label: "인물" },
+  { id: 4, label: "사물" },
+];
+
+const sales = [
+  { id: 0, label: "전체" },
+  { id: 1, label: "판매중" },
+  { id: 2, label: "판매완료" },
+];
+
+const methods = [
+  { id: 0, label: "전체" },
+  { id: 1, label: "교환중" },
+  { id: 2, label: "교환완료" },
+];
+
+// 각 필터 타입별 옵션 객체
+const filterOptions = {
+  grade: grades,
+  genre: genres,
+  sale: sales,
+  method: methods,
+};
+
+// UI에 보여줄 라벨
+const labels = {
+  grade: "등급",
+  genre: "장르",
+  sale: "매진여부",
+  method: "판매방법",
+};
+
+export default function FilterDropdown({
+  iconSize = 35,
+  visibleFilters = ["grade", "genre", "sale", "method"],
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,13 +69,6 @@ export default function FilterDropdown({ iconSize = 35, visibleFilters = ["grade
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const dropdownRef = useRef(null);
   const SM_WIDTH = 744;
-
-  const buttonWidths = {
-    grade: "md:w-[58px] lg:w-[64px]",
-    genre: "md:w-[58px] lg:w-[64px]",
-    sale: "md:w-[84px] lg:w-[93px]",
-    method: "md:w-[84px] lg:w-[93px]",
-  };
 
   useEffect(() => {
     function handleResize() {
@@ -58,10 +99,23 @@ export default function FilterDropdown({ iconSize = 35, visibleFilters = ["grade
     };
   }, [openFilter]);
 
+  // 쿼리에서 해당 필터 타입 값 가져오기 (id, 숫자 또는 null)
+  const getFilterValue = (type) => {
+    const value = searchParams.get(type);
+    return value ? Number(value) : 0; // 0 = 전체
+  };
+
+  // 선택된 id에 해당하는 label 가져오기
+  const getLabelFromId = (type, id) => {
+    const option = filterOptions[type].find((opt) => opt.id === id);
+    return option ? option.label : "전체";
+  };
+
   const handleSelect = (filterType, value) => {
     const params = new URLSearchParams(searchParams);
 
-    if (value === "전체") {
+    if (value === 0) {
+      // 전체 선택 시 필터 삭제
       params.delete(filterType);
     } else {
       params.set(filterType, value);
@@ -72,64 +126,55 @@ export default function FilterDropdown({ iconSize = 35, visibleFilters = ["grade
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const filterOptions = {
-    grade: grades,
-    genre: genres,
-    sale: sales,
-    method: methods,
-  };
-
-  const labels = {
-    grade: "등급",
-    genre: "장르",
-    sale: "매진여부",
-    method: "판매방법",
-  };
-
   return (
-    <div className="flex gap-4 items-center relative w-full flex-wrap md:flex-nowrap" ref={dropdownRef}>
+    <div
+      className="flex gap-4 items-center relative w-full flex-wrap md:flex-nowrap"
+      ref={dropdownRef}
+    >
       {/* 데스크톱 드롭다운 버튼들 */}
-      {visibleFilters.map((type) => (
-        <div key={type} className="relative hidden md:block">
-          <button
-            onClick={() =>
-              setOpenFilter((prev) => (prev === type ? null : type))
-            }
-            className={`flex justify-center md:gap-3 lg:gap-3.5  items-center h-[22px] lg:h-[24px] text-white border-none md:text-700-14 lg:text-700-16 cursor-pointer `}
-          >
-            <span>{labels[type]}</span>
-            {openFilter === type ? (
-              <GoTriangleUp className="ml-1" />
-            ) : (
-              <GoTriangleDown className="ml-1" />
-            )}
-          </button>
+      {visibleFilters.map((type) => {
+        const selectedId = getFilterValue(type);
+        return (
+          <div key={type} className="relative hidden md:block">
+            <button
+              onClick={() =>
+                setOpenFilter((prev) => (prev === type ? null : type))
+              }
+              className="flex justify-center md:gap-3 lg:gap-3.5 items-center h-[22px] lg:h-[24px] text-white border-none md:text-700-14 lg:text-700-16 cursor-pointer"
+            >
+              <span>{getLabelFromId(type, selectedId)}</span>
+              {openFilter === type ? (
+                <GoTriangleUp className="ml-1" />
+              ) : (
+                <GoTriangleDown className="ml-1" />
+              )}
+            </button>
 
-          {/* 해당 버튼 밑에 드롭다운 표시 */}
-          {openFilter === type && isSmOrLarger && (
-            <ul className="absolute left-0 mt-2 bg-black border text-white w-[134px] z-10">
-              {filterOptions[type].map((item) => (
-                <li
-                  key={item}
-                  onClick={() => handleSelect(type, item)}
-                  className="hover:bg-gray-700 px-4 py-2 cursor-pointer"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+            {/* 드롭다운 목록 */}
+            {openFilter === type && isSmOrLarger && (
+              <ul className="absolute left-0 mt-2 bg-black border text-white w-[134px] z-10 max-h-60 overflow-auto">
+                {filterOptions[type].map((item) => (
+                  <li
+                    key={item.id}
+                    onClick={() => handleSelect(type, item.id)}
+                    className={`hover:bg-gray-700 px-4 py-2 cursor-pointer ${
+                      item.id === selectedId ? "bg-gray-700 font-bold" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
 
       {/* 모바일 설정 아이콘 */}
       {visibleFilters.length > 0 && (
         <div
-          className={`flex justify-center items-center border border-gray-200 rounded-xs md:hidden cursor-pointer`}
-          style={{
-            width: `${iconSize}px`,
-            height: `${iconSize}px`,
-          }}
+          className="flex justify-center items-center border border-gray-200 rounded-xs md:hidden cursor-pointer"
+          style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
           onClick={() => setIsBottomSheetOpen(true)}
         >
           <GiSettingsKnobs
