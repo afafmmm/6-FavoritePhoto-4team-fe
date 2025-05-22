@@ -2,134 +2,124 @@
 
 import InputField from "@/components/ui/InputField";
 import PasswordField from "@/components/ui/PasswordField";
-import Search from "@/components/ui/Search";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import {useActionState, useEffect, useState } from "react";
+import mainLogoImg from "@/assets/main-logo.png";
+import googleLogoImg from "@/assets/google-logo.png";
+import loadingGif from "@/assets/loading.gif";
+import Image from "next/image";
+import { createUserAction } from "@/actions/create-user.action";
+
 
 export default function ExampleFormPage() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [form , setForm] = useState({})
+  const [writeError , setWriteError] = useState({})
+  const [state, formAction, isPending] = useActionState(createUserAction, null);
 
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState("");
-
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  // Search
-  const [keyword, setKeyword] = useState("");
-
-  // Search 간단 예시
   useEffect(() => {
-    // fetch 데이터 연결해서 하기(아래는 예시입니다.)
-    // const { data } = await getArticles(keyword ? { word: keyword } : {});
-  }, [keyword]);
+    if(state && !state.status) {
+      alert(state.error)
+    }
 
-  const MAX_NAME_LENGTH = 30;
+    // 성공하면 login페이지 이동 실패하면 에러 메시지 모달 또는 alert(호출)
+  }, [state])
 
-  // 이메일 유효성 검사
-  const validateEmail = (value) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setForm(prev => ({...prev, [name] : value}))
+  }
+  
+  const handleSubmit = (e) => {
+    const errors = {}
+
+    // 이메일 유효성 검사
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return "이메일을 입력해 주세요.";
-    if (!emailRegex.test(value)) return "이메일 형식이 아닙니다.";
-    return "";
-  };
+    if (!form.userEmail || !emailRegex.test(form.userEmail)) errors.userEmail = "이메일 형식이 아닙니다"
+    
+    // 닉네임 유효성 검사
+    if(!form.userNickname || form.userNickname.length < 4) errors.userNickname = "닉네임은 4자리 이상이어야 합니다"
 
-  // 핸들러
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-    setEmailError(validateEmail(value));
-  };
+    // 비밀번호 유효성 검사
+    if(!form.userPassword || form.userPassword.length < 8) errors.userPassword = "비밀번호는 8자리 이상이어야 합니다"
 
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    setName(value);
-    if (value.length > MAX_NAME_LENGTH) {
-      setNameError(
-        `포토카드 이름은 최대 ${MAX_NAME_LENGTH}자까지 입력 가능합니다.`
-      );
-    } else {
-      setNameError("");
+    // Second 비밀번호 유효성 검사
+    if(!form.userConfirmPassword || form.userConfirmPassword !== form.userPassword) errors.userConfirmPassword = "비밀번호가 일치하지 않습니다"
+
+    setWriteError(errors);
+
+    // 모든 조건을 충족한 경우 폼 데이터 전송
+    if (Object.keys(errors).length > 0) {
+      e.preventDefault();
     }
-  };
-
-  // 비밀번호 부분은 회원가입을 기준으로 구현했습니다
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (!value) {
-      setPasswordError("비밀번호를 입력해 주세요");
-    } else if (value.length < 8) {
-      setPasswordError("8자 이상 입력해 주세요");
-    } else {
-      setPasswordError("");
-    }
-
-    // 비밀번호 확인까지 작성했다가 또 다시 비밀번호를 바꿀 경우, 즉시 에러
-    if (confirmPassword && value !== confirmPassword) {
-      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setConfirmPasswordError("");
-    }
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-
-    if (value !== password) {
-      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setConfirmPasswordError("");
-    }
-  };
+  }
 
   return (
-    <div className="min-h-screen p-6 space-y-6">
-      <InputField
-        label="이메일"
-        placeholder="이메일을 입력해 주세요"
-        type="email"
-        name="email"
-        value={email}
-        onChange={handleEmailChange}
-        labelClassName="text-sm font-medium"
-        error={emailError}
-      />
+    <div className="fixed left-0 top-0 px-4 md:px-0  w-full h-full overflow-y-auto bg-my-black z-[8888]">
+      <div className="md:max-w-[440px] lg:max-w-[520px] md:w-full md:mx-auto md:mt-24 ">
+          <h2 className="flex justify-center mt-20 md:mt-0 lg:mt-0">
+            <Link href={"/"} className=""><Image src={mainLogoImg} alt="main-logo" className="w-48 h-9 "/></Link>
+          </h2>
+          <form action={formAction} onSubmit={handleSubmit} className="mt-[60px] mb-8 flex flex-col gap-8 md:w-full">
+            <InputField
+              label="이메일"
+              placeholder="이메일을 입력해 주세요"
+              type="userEmail"
+              name="userEmail"
+              value={form.userEmail || ""}
+              onChange={handleChange}
+              labelClassName="text-sm font-medium"
+              error={writeError.userEmail || ""}
+            />
 
-      <InputField
-        label="포토카드 이름"
-        placeholder="포토카드 이름을 입력해 주세요"
-        name="photocardName"
-        value={name}
-        onChange={handleNameChange}
-        labelClassName="text-base font-bold"
-        error={nameError}
-      />
+            <InputField
+              label="닉네임"
+              placeholder="닉네임을 입력해 주세요"
+              name="userNickname"
+              value={form.userNickname || ""}
+              onChange={handleChange}
+              labelClassName="text-sm font-medium"
+              error={writeError.userNickname || ""}
+            />
 
-      <PasswordField
-        label="비밀번호"
-        placeholder="8자 이상 입력해 주세요"
-        name="password"
-        value={password}
-        onChange={handlePasswordChange}
-        error={passwordError}
-      />
+            <PasswordField
+              label="비밀번호"
+              placeholder="8자 이상 입력해 주세요"
+              name="userPassword"
+              value={form.userPassword || ""}
+              onChange={handleChange}
+              error={writeError.userPassword || ""}
+            />
 
-      <PasswordField
-        label="비밀번호 확인"
-        placeholder="비밀번호를 한번 더 입력해 주세요"
-        name="confirmPassword"
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        error={confirmPasswordError}
-      />
+            <PasswordField
+              label="비밀번호 확인"
+              placeholder="비밀번호를 한번 더 입력해 주세요"
+              name="userConfirmPassword"
+              value={form.userConfirmPassword || ""}
+              onChange={handleChange}
+              error={writeError.userConfirmPassword || ""}
+            />
+            
+            <div className="flex flex-col gap-4">
+              <button type="submit"  disabled={isPending}  className="flex items-center justify-center gap-2 w-full h-[55px] lg:h-[60px] text-700-16 rounded-xs bg-main text-my-black disabled:!cursor-not-allowed disabled:bg-[#bfc802]">
+                    {isPending ? "가입 요청 전송 중.." : "가입하기"}
+                    {isPending && (
+                      <Image src={loadingGif} alt="로딩중" width={20} height={20} />
+                    )} 
+              </button>
+              <button className="w-full">
+                <div className="flex items-center justify-center gap-2 h-[55px] lg:h-[60px] rounded-xs bg-white">
+                  <Image src={googleLogoImg} alt="google" className="w-[22px] h-[22px]"/>
+                  <span className="text-my-black">Google로 시작하기</span>
+                </div>
+              </button>
+            </div>
 
-      <Search onSearch={setKeyword} />
-    </div>
+            <div className="flex items-center justify-center gap-2 text-400-14 lg:text-400-16">
+              <span>이미 최애의포토 회원이신가요?</span>
+              <Link href={"/login"}><span className="text-main underline">로그인하기</span></Link>
+            </div>
+          </form> 
+        </div>
+      </div>
   );
 }

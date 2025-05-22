@@ -23,7 +23,6 @@ export default function HomeFallback() {
             <span className="text-gray-400">|</span>
             <div className="h-3 w-10 bg-gray-500 rounded" />
 
-
             <div className="ml-auto h-3 w-10 bg-gray-500 rounded underline" />
           </div>
 

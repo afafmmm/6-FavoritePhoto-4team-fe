@@ -78,6 +78,10 @@ body {
   font-family: "noto", "Baskin", serif;
 }
 
+* a , * button {
+  cursor : pointer;
+}
+
 /* 모달 슬라이드 애니메이션 */
 @keyframes slide-up {
   from {

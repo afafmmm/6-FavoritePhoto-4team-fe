@@ -1,17 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import mainLogoImg from "@/assets/main-logo.png";
+import alarmIconImg from "@/assets/icon-alarm.png";
+import humbergerIconImg from "@/assets/icon-humberger.png";
 import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
-import Notification from "./Notification";
-import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+
 
 // 임시 로그인 상태 (실제 구현시 props/context/hook 등으로 대체 필요)
-const isLoggedIn = true; // true로 바꾸면 로그인 상태 테스트 가능
+const isLoggedIn = false; // true로 바꾸면 로그인 상태 테스트 가능
 const user = {
-  id: 101,
   point: 1540,
   nickname: "유디",
 };
@@ -19,108 +20,54 @@ const user = {
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showBackHeader, setShowBackHeader] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-
-  // 모바일에서 뒤로가기/페이지이름을 보여줄 경로 목록
-  const mobileBackPages = [
-    "/notification",
-    // 필요시 추가
-  ];
-  // 각 경로별 페이지 이름 매핑
-  const pageNames = {
-    "/notification": "알림",
-    // 필요시 추가
-  };
-
-  // 모바일에서 뒤로가기 헤더를 보여줄지 결정
-  React.useEffect(() => {
-    setShowBackHeader(mobileBackPages.includes(pathname));
-  }, [pathname]);
-
-  // 모바일에서 뒤로가기/페이지이름 노출 여부
-  const isMobileBackPage = mobileBackPages.includes(pathname);
-  const pageTitle = pageNames[pathname] || "";
+  
+  useEffect(() => {
+    // update pathname
+  }, [pathname])
 
   return (
-    <header>
-      <nav className="bg-black w-full h-14 flex items-center justify-between px-4 py-3 md:h-20 md:px-[40px] md:py-[23px] lg:px-[220px] lg:py-[27px] md:flex md:grid-cols-none md:items-center md:justify-between fixed top-0 left-0 z-50">
-        {/* 왼쪽: 햄버거 메뉴 또는 뒤로가기 (sm=기본, md 이상에서 숨김) */}
-        <div className="flex items-center md:hidden min-w-[44px] justify-start">
-          {showBackHeader ? (
-            <button
-              type="button"
-              onClick={() => router.back()}
-              aria-label="뒤로가기"
-            >
-              <Image
-                src={require("@/assets/icon_back.svg")}
-                alt="뒤로가기"
-                width={22}
-                height={22}
-                className="w-[22px] h-[22px]"
-                priority
-              />
-            </button>
-          ) : (
-            <button type="button" onClick={() => setMenuOpen(true)}>
-              <Image
-                src={require("@/assets/icon_menu.svg")}
-                alt="메뉴"
-                width={22}
-                height={22}
-                className="w-[22px] h-[22px]"
-                priority
-              />
-            </button>
-          )}
+    <header className="sticky top-0 left-0 z-[7777] bg-my-black">
+      <nav 
+      className={`
+          flex items-center 
+          max-w-[1480px] h-[60px] md:h-[70px] lg:h-[80px]
+          ${pathname && pathname === '/' ? "mx-auto px-4 md:px-9 lg:px-0" : ""}
+      `}
+      >
+        {/* 왼쪽: 햄버거 메뉴 (sm=기본, md 이상에서 숨김) */}
+        <div className="flex items-center md:hidden">
+          <button type="button" onClick={() => setMenuOpen(true)}>
+            <Image
+              src={humbergerIconImg}
+              alt="메뉴"
+              className="w-[22px] h-[22px]"
+            />
+          </button>
+
         </div>
-        {/* 가운데: 로고 또는 페이지 이름 */}
+        {/* 가운데: 로고 (sm에서는 가운데, md 이상에서는 왼쪽) */}
         <div className="flex items-center justify-center flex-1 md:justify-start md:flex-none">
-          {showBackHeader ? (
-            <span
-              className="text-white"
-              style={{
-                fontFamily: "BRB, baskin, sans-serif",
-                fontWeight: 400,
-                fontSize: "20px",
-                letterSpacing: 0,
-                lineHeight: "normal",
-              }}
-            >
-              {pageTitle}
-            </span>
+          <Link href={"/"}>
+            <Image src={mainLogoImg} alt="main-logo" className="w-[83px] h-[15px] md:w-28 md:h-5 lg:w-[138px] lg:h-6"/>
+          </Link>
+        </div>
+        {/* 오른쪽: 알림 또는 로그인 (sm에서만 보임) */}
+        <div className="flex items-center justify-end md:hidden">
+          {isLoggedIn ? (
+            <Image
+              src={alarmIconImg}
+              alt="알림"
+              className="w-[22px] h-[22px]"
+            />
           ) : (
-            <Link href="/">
-              <Image
-                src={require("@/assets/logo.svg")}
-                alt="최애의포토"
-                width={139}
-                height={25}
-                className="w-[83.37px] h-[15.12px] md:w-[111px] md:h-[20px] lg:w-[138.94px] lg:h-[25.2px]"
-                priority
-              />
+            <Link
+              href={"/login"}
+              className="text-400-14 text-gray-200 hover:text-gray-400"
+            >
+              로그인
             </Link>
           )}
-        </div>
-        {/* 오른쪽: 알림/로그인 (sm에서만 보임) */}
-        <div className="flex items-center justify-end md:hidden min-w-[44px]">
-          {!showBackHeader && (
-            <>
-              {isLoggedIn && <Notification userId={user.id} />}
-              {!isLoggedIn && (
-                <Link
-                  href="/login"
-                  className="text-400-14 text-white hover:text-gray-400"
-                >
-                  로그인
-                </Link>
-              )}
-            </>
-          )}
-          {/* 뒤로가기 헤더일 때 오른쪽 공간 맞추기용 투명 div */}
-          {showBackHeader && <div style={{ width: 22, height: 22 }} />}
         </div>
         {/* 데스크탑 네비게이션: md 이상에서만 보임 */}
         <div className="hidden md:flex flex-1 justify-end items-center">
@@ -129,8 +76,14 @@ const Navbar = () => {
               <li className="text-700-14 text-gray-200">
                 {user.point.toLocaleString()} P
               </li>
-              {/* 알림: 포인트와 닉네임 사이, 로그인 시 항상 보임 */}
-              <Notification userId={user.id} />
+              <li>
+                <Image
+                  src={alarmIconImg}
+                  alt="알림"
+                  className="w-6 h-6"
+                  style={{ width: 24, height: 24 }}
+                />
+              </li>
               <li className="relative">
                 <button
                   className="title-18 text-gray-200 focus:outline-none"
@@ -146,19 +99,15 @@ const Navbar = () => {
                 />
               </li>
               <li>
-                <Link
-                  href="/logout"
-                  className="border-l pl-[30px] text-gray-400 border-gray-400 hover:text-gray-400 h-4 flex items-center"
-                  style={{ alignSelf: "center" }}
-                >
+                <button className="border-l pl-[30px] text-gray-400 border-gray-400 hover:text-gray-400 h-4 flex items-center">
                   로그아웃
-                </Link>
+                </button>
               </li>
             </ul>
           ) : (
             <ul className="flex space-x-6 text-gray-200 text-[14px]">
               <li>
-                <Link href="/login" className="hover:text-gray-400">
+                <Link href={"/login"} className="hover:text-gray-400">
                   로그인
                 </Link>
               </li>

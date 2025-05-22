@@ -21,11 +21,12 @@ function PasswordField({
   return (
     <div className="w-full flex flex-col gap-2">
       {label && (
-        <label className="text-sm font-medium text-white">{label}</label>
+        <label htmlFor={name} className="text-sm font-medium text-white text-400-16">{label}</label>
       )}
 
       <div className="relative w-full">
         <input
+          id={name}
           type={isVisible ? "text" : "password"}
           name={name}
           value={value}

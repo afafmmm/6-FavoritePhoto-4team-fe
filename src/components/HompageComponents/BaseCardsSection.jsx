@@ -1,48 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import BaseCardList from "../ui/BaseCardList";
 import FilterDropdown from "../FllterDropdown/FilterDropdown";
 import Search from "../ui/Search";
 import Sort from "../ui/Sort";
 import SellButton from "../ui/SellButton";
+import { Suspense } from "react";
+import HomeFallback from "../skeletons/HomeFallback"; // 너가 만든 스켈레톤 컴포넌트
+import FilteredCardList from "../ui/FilterCardList";
 
 export default function BaseCardsSection() {
-  const [cards, setCards] = useState([]);
-  const searchParams = useSearchParams();
-
-  // 쿼리 파라미터
-  const gradeFilter = searchParams.get("grade");
-  const genreFilter = searchParams.get("genre");
-  const saleFilter = searchParams.get("sale");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("/data/cards.json");
-      const data = await res.json();
-
-      const filtered = data.filter((card) => {
-        const matchGrade = !gradeFilter || card.grade === gradeFilter;
-        const matchGenre = !genreFilter || card.genre === genreFilter;
-        const matchSale =
-          !saleFilter ||
-          (saleFilter === "판매중"
-            ? card.sale === "판매중"
-            : card.sale === "판매완료");
-
-        return matchGrade && matchGenre && matchSale;
-      });
-
-      setCards(filtered);
-    };
-
-    fetchData();
-  }, [gradeFilter, genreFilter, saleFilter]);
-
   return (
     <>
-      {/* 헤더 영역 */}
+      {/* 헤더 */}
       <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between">
           <h2 className="hidden md:block title-48 lg:title-62">마켓플레이스</h2>
@@ -63,15 +30,15 @@ export default function BaseCardsSection() {
           <div className="hidden md:block">
             <Search />
           </div>
-          <FilterDropdown/>
+          <FilterDropdown />
           <Sort />
         </div>
       </div>
 
-      {/* 카드 영역 */}
-      <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-20">
-        <BaseCardList cards={cards} />
-      </div>
+      {/* 카드 Suspense 처리 */}
+      <Suspense fallback={<HomeFallback  />}>
+        <FilteredCardList />
+      </Suspense>
     </>
   );
 }

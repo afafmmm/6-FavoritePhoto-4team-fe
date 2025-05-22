@@ -14,7 +14,7 @@ export default function Search({ onSearch }) {
   };
 
   return (
-    <div className="relative w-[345px] h-[45px] md:w-[200px] md:h-[45px] lg:w-[320px] lg:h-[50px]">
+    <div className="relative w-full h-11 md:w-52 md:h-11 lg:w-[320px] lg:h-12">
       <input
         type="text"
         value={keyword}
