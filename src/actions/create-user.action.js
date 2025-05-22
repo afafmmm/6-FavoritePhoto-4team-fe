@@ -10,7 +10,7 @@ export async function createUserAction(state, formData) {
             nickname : formData.get("userNickname"),
             password : formData.get("userPassword"),
         }
-        const res = await fetch('https://six-favoritephoto-4team-be.onrender.com/api/auth/signup', { method : "POST", body : JSON.stringify(values) }) 
+        const res = await fetch('https://six-favoritephoto-4team-be.onrender.com/api/auth/login', { method : "POST", body : JSON.stringify(values) }) 
 
         if(!res.ok) {
             throw new Error(res.statusText)

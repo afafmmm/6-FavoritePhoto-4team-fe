@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
       <body className="w-full">
         <div className="mx-auto min-h-screen px-4  md:px-5 lg:px-0 max-w-[1480px]">
           <Header />
-          <main className="pb-20 md:pb-0 pt-[60px] md:pt-[70px] lg:pt-[80px]">
+          <main className="pb-20 md:pb-0">
             <Providers>{children}</Providers>
           </main>
         </div>
