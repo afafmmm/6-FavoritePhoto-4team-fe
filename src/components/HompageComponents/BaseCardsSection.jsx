@@ -48,6 +48,7 @@ export default async function BaseCardsSection({ grade, genre, sale }) {
           <NoResultMessage message={"필터링 결과가 존재하지 않습니다."}/>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-20">
+            {/* 서스펜스 스켈레톤 동작 */}
             <Suspense key={filtered} fallback={<HomeFallbackCount count={12} />}>
               <BaseCardList cards={filtered} />
             </Suspense>
