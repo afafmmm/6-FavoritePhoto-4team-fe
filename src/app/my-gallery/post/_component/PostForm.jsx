@@ -121,7 +121,7 @@ export default function PostForm({ grades, genres }) {
 
   return (
     <form
-      action="/api/me/post"
+      action="/api/my-gallery/post"
       method="POST"
       encType="multipart/form-data"
       onSubmit={handleSubmit} // Enter로 제출!
