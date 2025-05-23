@@ -1,4 +1,11 @@
-export default function GradeTag({ grade = "COMMON", size = "md" }) {
+export default function GradeTag({ grade = 1 }) {
+  const gradeMap = {
+    1: "COMMON",
+    2: "RARE",
+    3: "SUPER RARE",
+    4: "LEGENDARY",
+  };
+
   const colorMap = {
     COMMON: "text-main",
     RARE: "text-my-blue",
@@ -6,21 +13,8 @@ export default function GradeTag({ grade = "COMMON", size = "md" }) {
     LEGENDARY: "text-my-pink",
   };
 
-  const textSize = {
-    xxs: "text-300-10",
-    xs: "text-xs",
-    md: "text-base",
-    lg: "text-lg",
-    xl: "text-2xl",
-  }[size];
+  const gradeLabel = gradeMap[grade] || "COMMON";
+  const colorClass = colorMap[gradeLabel];
 
-  return (
-    <span
-      className={`font-light ${colorMap[grade]} ${textSize} ${
-        textSize === "text-lg" || textSize === "text-2xl" ? "!font-bold" : ""
-      }`}
-    >
-      {grade}
-    </span>
-  );
+  return <span className={`font-light ${colorClass}`}>{gradeLabel}</span>;
 }
