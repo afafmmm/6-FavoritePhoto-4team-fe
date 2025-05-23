@@ -1,18 +1,45 @@
-
+"use client";
+import { useEffect, useState } from "react";
 import PhotoBuyerSection from "@/components/PhotoBuyer/PhotoBuyerSection";
-import { cookieFetch } from "@/lib/api/fetch-client";
+import { storeService } from "@/lib/api/api-store";
 
-const API_BASE_URL = "https://six-favoritephoto-4team-be.onrender.com";
 async function fetchPhotoDetail(id) {
-  const res = await cookieFetch(`${API_BASE_URL}/api/store/cards/${id}`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch photo detail");
+  try {
+    const photoData = await storeService.getStoreCardDetail(id);
+    return photoData;
+  } catch (err) {
+    console.error("사진 상세 정보 로딩 실패:", err);
+    return null; // 오류 발생 시 null 반환
   }
-  return res.json();
 }
 
-export default async function PhotoDetailPage({ params }) {
-  const photo = await fetchPhotoDetail(params.id);
+export default function PhotoDetailPage({ params }) {
+  const [photo, setPhoto] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (params.id) {
+      setLoading(true); // 데이터 가져오기 시작 시 로딩 상태로 설정
+      const loadPhotoData = async () => {
+        const data = await fetchPhotoDetail(params.id);
+        setPhoto(data);
+        setLoading(false); // 데이터 가져오기 완료 후 로딩 상태 해제
+      };
+      loadPhotoData();
+    } else {
+      // params.id가 없는 경우 (예: URL 직접 접근 시 ID가 누락된 경우)
+      setPhoto(null);
+      setLoading(false);
+    }
+  }, [params.id]); // params.id가 변경될 때마다 실행
+
+  if (loading) {
+    return <p>로딩 중...</p>;
+  }
+
+  if (!photo) {
+    return <p>사진 정보를 찾을 수 없습니다.</p>; // 로딩이 끝났지만 사진 정보가 없는 경우
+  }
 
   return (
     <section>
