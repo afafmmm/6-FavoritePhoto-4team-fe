@@ -102,12 +102,18 @@ export default function FilterDropdown({
   // 쿼리에서 해당 필터 타입 값 가져오기 (id, 숫자 또는 null)
   const getFilterValue = (type) => {
     const value = searchParams.get(type);
-    return value ? Number(value) : 0; // 0 = 전체
+    return value ? Number(value) : 0;
   };
 
   // 선택된 id에 해당하는 label 가져오기
   const getLabelFromId = (type, id) => {
     const option = filterOptions[type].find((opt) => opt.id === id);
+    const hasQueryParam = searchParams.has(type);
+
+    if (!hasQueryParam && id === 0) {
+      return labels[type]; 
+    }
+
     return option ? option.label : "전체";
   };
 
