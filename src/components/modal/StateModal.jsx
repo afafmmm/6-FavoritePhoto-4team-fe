@@ -1,3 +1,5 @@
+// 사용 설명은 노션에...
+
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useStateModal } from "@/providers/StateModalProvider";
@@ -36,7 +38,7 @@ export default function StateModal() {
       textOrCount = cardInfo.count + "장";
       if (isSuccess) {
         buttonText = "마이갤러리에서 확인하기";
-        path = "/me";
+        path = "/my-gallery";
       } else {
         buttonText = "마켓플레이스로 돌아가기";
         path = "/home";
@@ -48,10 +50,10 @@ export default function StateModal() {
       textOrCount = "포토카드";
       if (isSuccess) {
         buttonText = "마이갤러리에서 확인하기";
-        path = "/me";
+        path = "/my-gallery";
       } else {
         buttonText = "마이갤러리로 돌아가기";
-        path = "/me";
+        path = "/my-gallery";
       }
       break;
   }

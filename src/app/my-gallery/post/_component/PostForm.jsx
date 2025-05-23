@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { postCard } from "@/lib/api/api-users";
 import { useStateModal } from "@/providers/StateModalProvider";
 
-export default function PostForm({ grades, genres }) {
+export default function PostForm({ grades, genres, disabled }) {
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("");
   const [genre, setGenre] = useState("");
@@ -35,7 +35,7 @@ export default function PostForm({ grades, genres }) {
   const { openModal } = useStateModal(); // 모달 provider
 
   // BE와 연동
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: postCard,
     onSuccess: (data) => {
       openModal(201, "생성", { grade, name, count: volumn });
@@ -181,8 +181,8 @@ export default function PostForm({ grades, genres }) {
         onChange={handleChange(setDescription, "description")}
         error={(isSubmitted || touched.description) && errors.description}
       />
-      <Button type="exchangeGreen" disabled={!isValid}>
-        생성하기
+      <Button type="exchangeGreen" disabled={!isValid || disabled}>
+        {isPending ? "생성 중..." : "생성하기"}
       </Button>
     </form>
   );

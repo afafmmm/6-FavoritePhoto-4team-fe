@@ -1,29 +1,21 @@
-// import { baseUrl } from "./fetch-client";
 import { cookieFetch } from "./fetch-client";
 
 // 장르 + 등급 get
 export async function getCardMeta() {
-  const res = await fetch(`${baseUrl}/users/card-meta`);
+  return await cookieFetch("/api/users/card-meta");
+}
 
-  if (!res.ok) {
-    throw new Error("장르, 등급 불러오기 실패");
-  }
-
-  return res.json();
+// 월별 생성 횟수 get
+export async function getMonthlyCardCount() {
+  return await cookieFetch("/api/users/monthly-post-count");
 }
 
 // POST
 export async function postCard(formData) {
-  const res = await fetch(`${baseUrl}/users/post`, {
+  return await cookieFetch("/api/users/post", {
     method: "POST",
     body: formData,
   });
-
-  if (!res.ok) {
-    throw new Error("POST 실패");
-  }
-
-  return res.json();
 }
 
 export const userService = {
