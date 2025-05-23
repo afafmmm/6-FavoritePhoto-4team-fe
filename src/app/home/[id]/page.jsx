@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import PhotoBuyerSection from "@/components/PhotoBuyer/PhotoBuyerSection";
 import { storeService } from "@/lib/api/api-store";
+import { useRouter } from "next/navigation";
 
 async function fetchPhotoDetail(id) {
   try {
@@ -16,6 +17,7 @@ async function fetchPhotoDetail(id) {
 export default function PhotoDetailPage({ params }) {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (params.id) {
@@ -38,7 +40,8 @@ export default function PhotoDetailPage({ params }) {
   }
 
   if (!photo) {
-    return <p>사진 정보를 찾을 수 없습니다.</p>; // 로딩이 끝났지만 사진 정보가 없는 경우
+    router.push("/login");
+    return null;
   }
 
   return (
