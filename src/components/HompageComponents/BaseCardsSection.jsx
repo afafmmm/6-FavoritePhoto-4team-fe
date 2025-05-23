@@ -3,10 +3,11 @@ import FilterDropdown from "../FllterDropdown/FilterDropdown";
 import Search from "../ui/Search";
 import Sort from "../ui/Sort";
 
-export default async function BaseCardsSection({ grade, genre, sale }) {
-  const apiUrl = "http://localhost:3002/api/store";
 
-  const res = await fetch(apiUrl);
+export default async function BaseCardsSection({ grade, genre, sale }) {
+  
+
+  const res = await fetch(`${process.env.DATABASE_URL}/api/store`);
   if (!res.ok) {
     throw new Error("카드 데이터를 불러오는데 실패했습니다.");
   }
