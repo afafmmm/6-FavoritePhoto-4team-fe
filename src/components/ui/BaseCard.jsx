@@ -4,138 +4,70 @@ import Image from "next/image";
 import favicon from "@/assets/favicon.svg";
 import GradeTag from "../tag/GradeTag";
 import example from "@/assets/example.svg";
+import Link from "next/link";
+
+const genreMap = {
+  1: "여행",
+  2: "풍경",
+  3: "인물",
+  4: "사물",
+};
 
 export default function BaseCard({
-  title,
-  image,
-  grade,
-  genre,
-  owner,
-  price,
-  amount,
-  amountLabel = "", // 수량 or 잔여 선택
-  isFavorite = false,
-  children, // 설명이나 버튼 등 option
-  showPurchasePrice = false, // "4P에 구매" option
-  sale
+  id,
+  name,
+  imageUrl,
+  gradeId,
+  genreId,
+  description,
+  totalQuantity,
+  initialPrice,
+  creatorId,
+  createdAt,
 }) {
-  // '잔여'일 경우 스타일 분리
-  const optionAmount = () => {
-    if (!amount) return null;
-
-    if (amountLabel === "잔여" && amount.includes("/")) {
-      const [remain, total] = amount.split("/").map((s) => s.trim());
-      return (
-        <div className="flex justify-between">
-          <span className="text-gray-300 text-300-10 md:text-300-16">
-            {amountLabel}
-          </span>
-          <span>
-            <span className="text-white text-400-10 md:text-400-18">
-              {remain}
-            </span>
-            <span className="text-gray-300 text-300-10 md:text-300-18">
-              {" "}
-              / {total}
-            </span>
-          </span>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex justify-between">
-        <span className="text-gray-300 text-300-10 md:text-300-16">
-          {amountLabel}
-        </span>
-        <span className="text-white text-400-10 md:text-400-18">{amount}</span>
-      </div>
-    );
-  };
-
   return (
-    <div className="bg-my-black text-white w-full px-2 py-2 md:px-5 md:py-5 lg:px-8 lg:py-8 border border-gray-800">
-      {/* 이미지 */}
-      <div className="w-full aspect-[4/3] relative mb-3 md:mb-5">
-        <Image src={example} alt={title} fill className="object-cover" />
-      </div>
-
-      {/* 제목 */}
-      <h3 className="text-700-14 md:text-700-22 truncate mb-1">{title}</h3>
-
-      {/* 등급, 카테고리, 작성자 */}
-      <div className="text-400-10 md:text-400-16 space-y-1 md:space-y-2">
-        <div className="flex items-center gap-1.5">
-          {/* 기본값 */}
-          <div className="md:hidden">
-            <GradeTag grade={grade} size="xxs" />
+    <Link href={`/home/${id}`}>
+      <div className="flex flex-col gap-2.5 md:gap-5 p-[15px] md:p-5 lg:p-10 border-1 border-white/10 rounded-xs bg-gray-500">
+        <Image src={example} alt="photo-img" className="w-full h-full" />
+        <div className="flex flex-col gap-2.5 md:gap-5">
+          <div>
+            <h2 className="text-700-14 md:text-700-22 mb-1.5 md:mb-2.5">{name}</h2>
+            <div className="flex items-center justify-between gap-1 md:gap-0">
+              <div className="flex items-center justify-between">
+                <div className="flex [&_*]:flex ">
+                  <div className="items-center justify-center gap-1 md:gap-2.5">
+                    <p className="[&_*]:text-300-10 md:[&_*]:text-300-16"><GradeTag grade={gradeId} /></p>
+                    <span className="h-3 md:h-5 w-[1px] bg-gray-400 md:"></span>
+                    <span className="text-nowrap text-400-10 md:text-400-16 text-gray-300">{genreMap[genreId]}</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {/* 닉네임 */}
+                <span className="text-400-10 md:text-400-16 underline line-clamp-1">우리들의 이야기</span>
+              </div>
+            </div>
           </div>
-
-          {/* md 이상 */}
-          <div className="hidden md:block">
-            <GradeTag grade={grade} size="md" />
-          </div>
-
-          <span className="text-gray-400">|</span>
-          <span className="text-gray-300">{genre}</span>
-
-          {/* lg: 4P에 구매, owner를 같은 줄에 표시 */}
-          <div className="hidden lg:flex items-center gap-1.5">
-            {showPurchasePrice && price && (
-              <>
-                <span className="text-gray-400">|</span>
-                <span className="text-400-10 md:text-400-16">
-                  {price} P{" "}
-                  <span className="text-gray-300 text-400-10 md:text-400-16">
-                    에 구매
-                  </span>
-                </span>
-              </>
-            )}
-            {owner && <div className="underline">{owner}</div>}
+          <div className="w-full h-[1px] bg-gray-400">{/* LINE */}</div>
+          <div className="
+          flex flex-col gap-[5px] md:gap-2.5 [&>div]:flex [&>div]:justify-between
+            [&_p]:text-300-10 md:[&_p]:text-300-16 [&_p]:text-gray-300
+            [&_span]:text-400-10 md:[&_span]:text-400-16 
+          ">
+            <div>
+              <p>가격</p>
+              <span>{initialPrice} P</span>
+            </div>
+            <div>
+              <p>잔여</p>
+              <span>{totalQuantity} / <span className="text-gray-300">5</span></span>
+            </div>
           </div>
         </div>
-
-        {/* md 이하에서만 하단 줄로 분리 */}
-        <div className="lg:hidden flex justify-between">
-          <div className="flex gap-1.5">
-            {showPurchasePrice && price && (
-              <span className="text-400-10 md:text-400-16">
-                {price} P{" "}
-                <span className="text-gray-300 text-400-10 md:text-400-16">
-                  에 구매
-                </span>
-              </span>
-            )}
-          </div>
-          {owner && <div className="underline">{owner}</div>}
+        <div className="hidden md:flex justify-center">
+          <Image src={favicon} alt="logo" className="w-24 h-4"/>
         </div>
       </div>
-
-      <div className="border-t border-gray-700 my-2 md:my-4" />
-
-      {/* 가격 / 수량,잔여 */}
-      <div className="space-y-1">
-        {price && !showPurchasePrice && (
-          <div className="flex justify-between">
-            <span className="text-gray-300 text-300-10 md:text-300-16">
-              가격
-            </span>
-            <span className="text-400-10 md:text-400-18">{price} P</span>
-          </div>
-        )}
-        {optionAmount()}
-      </div>
-
-      {/* 설명, 버튼 영역 */}
-      {children && <div className="mt-2">{children}</div>}
-
-      {/* 로고 */}
-      {isFavorite && (
-        <div className="hidden md:flex justify-center mt-4">
-          <Image src={favicon} alt="최애" width={80} height={80} />
-        </div>
-      )}
-    </div>
+    </Link>
   );
 }

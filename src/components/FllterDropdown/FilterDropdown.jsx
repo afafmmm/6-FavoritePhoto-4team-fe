@@ -134,7 +134,7 @@ export default function FilterDropdown({
 
   return (
     <div
-      className="flex gap-4 items-center relative w-full flex-wrap md:flex-nowrap"
+      className="flex gap-4 items-center relative w-full flex-wrap md:flex-nowrap md:ml-6 lg:ml-12"
       ref={dropdownRef}
     >
       {/* 데스크톱 드롭다운 버튼들 */}

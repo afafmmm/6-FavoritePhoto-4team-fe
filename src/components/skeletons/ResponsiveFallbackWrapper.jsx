@@ -5,10 +5,10 @@ import HomeFallback from './HomeFallback';
 
 export default function SkeletonCardLayout({children}) {
   return(
-    <>
+    <div>
     <HomeFallback>
-    {children}
+      {children}
     </HomeFallback>
-    </>
+    </div>
   )
 }

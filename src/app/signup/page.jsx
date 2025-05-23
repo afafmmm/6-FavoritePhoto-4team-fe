@@ -68,7 +68,7 @@ export default function SignupPage() {
               disabled={isPending}
               className="flex items-center justify-center gap-2 w-full h-[55px] lg:h-[60px] text-700-16 rounded-xs bg-main text-my-black disabled:!cursor-not-allowed disabled:bg-[#bfc802]"
             >
-              {isPending ? "가입 요청 중..." : "가입하기"}
+              {isPending ? "회원가입 요청 중..." : "가입하기"}
               {isPending && (
                 <Image src={loadingGif} alt="로딩중" width={20} height={20} />
               )}

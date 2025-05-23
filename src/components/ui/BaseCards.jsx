@@ -9,7 +9,7 @@ export default async function BaseCards({ searchParams }) {
   const hasInitialParams = gradeFilter || genreFilter || saleFilter;
 
   if (!hasInitialParams) {
-    await delay(1000); //일단 여기는 나중에 처리하겠습니다.
+    // await delay(1000); //일단 여기는 나중에 처리하겠습니다.
   } 
 
   const res = await fetch("https://6-favorite-photo-4team-fe.vercel.app/data/cards.json", {
