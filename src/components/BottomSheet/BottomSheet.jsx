@@ -1,106 +1,129 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { IoClose } from "react-icons/io5";
+import { RiResetLeftFill } from "react-icons/ri";
+
 import FilterTab from "./FilterTab";
 import FilterPanelGrade from "./FilterPanelGrade";
 import FilterPanelGenre from "./FilterPanelGenre";
 import FilterPanelSale from "./FilterPanelSale";
-import { useFilterQuery } from "@/lib/api/api-bottomfilter";
-import { IoClose } from "react-icons/io5";
-import { RiResetLeftFill } from "react-icons/ri";
+import FilterPanelSaleType from "./FilterPanelSaleType"; // ⬅️ 새로 만든 컴포넌트
 
-export default function BottomSheet({ onClose }) {
+export default function BottomSheet({
+  filters = ["grade", "genre", "saleType", "sale"],
+  counts = { grade: [], genre: [], saleType: [], sale: [] },
+  loading = false,
+  filteredCount,
+  onClose,
+  onFilterChange,
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [selectedTab, setSelectedTab] = useState("grade");
-  const [selectedGrades, setSelectedGrades] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedSale, setSelectedSale] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [counts, setCounts] = useState({
-    grade: {},
-    genre: {},
-    sale: {},
-  });
-  const [filteredCount, setFilteredCount] = useState(0);
 
-  // 🔑 실시간 필터 상태를 계산
-  const currentFilter = useMemo(
-    () => ({
-      grade: selectedGrades.length > 0 ? selectedGrades : null,
-      genre: selectedGenres.length > 0 ? selectedGenres : null,
-      sale: selectedSale ?? null,
-    }),
-    [selectedGrades, selectedGenres, selectedSale]
+  const getInitialValues = (key) => {
+    const val = searchParams.get(key);
+    if (!val) return [];
+    return val
+      .split(",")
+      .map((v) => (key === "sale" || key === "saleType" ? v : Number(v)));
+  };
+
+  const [selectedGrade, setSelectedGrade] = useState(getInitialValues("grade"));
+  const [selectedGenre, setSelectedGenre] = useState(getInitialValues("genre"));
+  const [selectedSale, setSelectedSale] = useState(getInitialValues("sale"));
+  const [selectedSaleTypes, setSelectedSaleTypes] = useState(
+    getInitialValues("saleType")
   );
 
-  const { refetch } = useFilterQuery(currentFilter);
-
   useEffect(() => {
-    async function fetchAllAndCount() {
-      try {
-        setLoading(true);
-        const res = await fetch("/data/cards.json");
-        const allData = await res.json();
+    const filterParams = {};
+    if (selectedGrade.length) filterParams.grade = selectedGrade.join(",");
+    if (selectedGenre.length) filterParams.genre = selectedGenre.join(",");
+    if (selectedSale.length) filterParams.sale = selectedSale.join(",");
+    if (selectedSaleTypes.length)
+      filterParams.saleType = selectedSaleTypes.join(",");
 
-        setCounts({
-          grade: countByKey(allData, "grade"),
-          genre: countByKey(allData, "genre"),
-          sale: countByKey(allData, "sale"),
-        });
-      } catch (err) {
-        console.error("전체 데이터 요청 실패:", err);
-      } finally {
-        setLoading(false);
-      }
+    console.log("필터 요청값:", filterParams); 
+    if (onFilterChange) {
+      onFilterChange(filterParams);
     }
-    fetchAllAndCount();
-  }, []);
-
-  // 선택 항목이 변경될 때마다 결과 개수 갱신
-  useEffect(() => {
-    async function fetchFiltered() {
-      try {
-        setLoading(true);
-        const { data } = await refetch();
-        setFilteredCount(data.length);
-      } catch (err) {
-        console.error("필터 사진 요청 실패:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchFiltered();
-  }, [currentFilter, refetch]);
-
-  function countByKey(items, key) {
-    return items.reduce((acc, item) => {
-      acc[item[key]] = (acc[item[key]] || 0) + 1;
-      return acc;
-    }, {});
-  }
-
-  const handleApply = async () => {
-    try {
-      setLoading(true);
-      const { data } = await refetch();
-      console.log("필터 결과:", data);
-      onClose();
-    } catch (err) {
-      console.error("API 요청 실패:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const isFilterActive =
-    selectedGrades.length > 0 ||
-    selectedGenres.length > 0 ||
-    selectedSale !== null;
+  }, [selectedGrade, selectedGenre, selectedSale, selectedSaleTypes]);
 
   const handleReset = () => {
-    setSelectedGrades([]);
-    setSelectedGenres([]);
-    setSelectedSale(null);
-    setFilteredCount(0);
+    setSelectedGrade([]);
+    setSelectedGenre([]);
+    setSelectedSale([]);
+    setSelectedSaleTypes([]);
   };
+
+  const handleApply = () => {
+    const params = new URLSearchParams(searchParams);
+
+    selectedGrade.length
+      ? params.set("grade", selectedGrade.join(","))
+      : params.delete("grade");
+    selectedGenre.length
+      ? params.set("genre", selectedGenre.join(","))
+      : params.delete("genre");
+    selectedSale.length
+      ? params.set("sale", selectedSale.join(","))
+      : params.delete("sale");
+    selectedSaleTypes.length
+      ? params.set("saleType", selectedSaleTypes.join(","))
+      : params.delete("saleType");
+
+    router.push(`${pathname}?${params.toString()}`);
+    if (onClose) onClose();
+  };
+
+  const gradeOptions = [
+    { label: "COMMON", value: 1 },
+    { label: "RARE", value: 2 },
+    { label: "SUPER RARE", value: 3 },
+    { label: "LEGENDARY", value: 4 },
+  ];
+
+  const genreOptions = [
+    { label: "여행", value: 1 },
+    { label: "풍경", value: 2 },
+    { label: "인물", value: 3 },
+    { label: "사물", value: 4 },
+  ];
+
+  const normalizedGrades = Array.isArray(counts.grade)
+    ? counts.grade.reduce((acc, item) => {
+        const option = gradeOptions.find((opt) => opt.value === item.gradeId);
+        if (option) acc[option.label] = item.count;
+        return acc;
+      }, {})
+    : counts.grade;
+
+  const normalizedGenres = Array.isArray(counts.genre)
+    ? counts.genre.reduce((acc, item) => {
+        const option = genreOptions.find((opt) => opt.value === item.genreId);
+        if (option) acc[option.value] = item.count;
+        return acc;
+      }, {})
+    : counts.genre;
+
+  const normalizedSales = Array.isArray(counts.sale)
+    ? counts.sale.reduce((acc, item) => {
+        acc[item.status] = item.count;
+        return acc;
+      }, {})
+    : counts.sale;
+
+  const normalizedSaleTypes = Array.isArray(counts.saleType)
+    ? counts.saleType.reduce((acc, item) => {
+        acc[item.status] = item.count;
+        return acc;
+      }, {})
+    : counts.saleType;
 
   return (
     <div className="fixed flex flex-col justify-between bottom-0 left-0 w-full h-120 bg-[#1B1B1B] text-white p-4 z-9000 border-t border-gray-700 rounded-t-2xl max-h-[70vh] overflow-auto">
@@ -115,27 +138,41 @@ export default function BottomSheet({ onClose }) {
           </button>
         </div>
 
-        <FilterTab selected={selectedTab} onChange={setSelectedTab} />
+        <FilterTab
+          selected={selectedTab}
+          onChange={setSelectedTab}
+          filters={filters}
+        />
 
-        {selectedTab === "grade" && (
+        {selectedTab === "grade" && filters.includes("grade") && (
           <FilterPanelGrade
-            grades={counts.grade}
-            selectedGrades={selectedGrades}
-            onSelectGrade={setSelectedGrades}
+            grades={normalizedGrades}
+            selectedGrade={selectedGrade}
+            onSelectGrade={setSelectedGrade}
           />
         )}
-        {selectedTab === "genre" && (
+
+        {selectedTab === "genre" && filters.includes("genre") && (
           <FilterPanelGenre
-            counts={counts.genre}
-            selectedGenres={selectedGenres}
-            onSelectGenres={setSelectedGenres}
+            counts={normalizedGenres}
+            selectedGenres={selectedGenre}
+            onSelectGenres={setSelectedGenre}
           />
         )}
-        {selectedTab === "sale" && (
+
+        {selectedTab === "sale" && filters.includes("sale") && (
           <FilterPanelSale
-            sales={counts.sale}
+            sales={normalizedSales}
             selectedSale={selectedSale}
             onSelectSale={setSelectedSale}
+          />
+        )}
+
+        {selectedTab === "saleType" && filters.includes("saleType") && (
+          <FilterPanelSaleType
+            saleTypes={normalizedSaleTypes}
+            selectedSaleTypes={selectedSaleTypes}
+            onSelectSaleTypes={setSelectedSaleTypes}
           />
         )}
       </div>
@@ -149,13 +186,16 @@ export default function BottomSheet({ onClose }) {
         </div>
 
         <button
-          className="w-full bg-yellow-400 text-black py-3 font-bold mt-4 rounded disabled:opacity-50 cursor-pointer"
+          className="w-full bg-yellow-400 text-black py-3 font-bold rounded disabled:opacity-50 cursor-pointer"
           onClick={handleApply}
           disabled={loading}
         >
           {loading
             ? "불러오는 중..."
-            : isFilterActive
+            : selectedGrade.length ||
+              selectedGenre.length ||
+              selectedSale.length ||
+              selectedSaleTypes.length
             ? `${filteredCount}개 포토보기`
             : "포토보기"}
         </button>

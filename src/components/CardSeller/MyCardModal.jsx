@@ -2,17 +2,31 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Search from "../ui/Search";
-import BaseCard from "../ui/BaseCard";
 import closeIcon from "@/assets/close.svg";
 import Image from "next/image";
-import FilterDropdown from "../FllterDropdown/FilterDropdown";
 
-export default function MyCardModal({ isOpen, onClose }) {
+import CardSellDetail from "./CardSellDetail";
+import MyCard from "../PhotoCard/MyCard";
+import { useQuery } from "@tanstack/react-query";
+import { getMyCards } from "@/lib/api/api-users";
+
+export default function MyCardModal({ isOpen, onClose, currentUserId }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const startY = useRef(null);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["myGalleryForModal"],
+    queryFn: getMyCards,
+    enabled: isOpen,
+    onSuccess: (res) => {
+      console.log("myGallery 응답:", res);
+    },
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -103,55 +117,73 @@ export default function MyCardModal({ isOpen, onClose }) {
           />
         )}
 
-        <div className="text-start text-gray-300 mb-2 md:mb-8 md:mt-6 lg:mt-0.5 title-14 md:title-18 lg:title-24">
-          마이갤러리
-        </div>
+        {showDetail && selectedCard ? (
+          <CardSellDetail
+            card={selectedCard}
+            availableCards={
+              data?.items?.find((c) => c.id === selectedCard.photoCard.id)
+                ?.userCards || []
+            }
+            onClose={() => {
+              setSelectedCard(null);
+              setShowDetail(false);
+            }}
+          />
+        ) : (
+          <>
+            <div className="text-start text-gray-300 mb-2 md:mb-8 md:mt-6 lg:mt-0.5 title-14 md:title-18 lg:title-24">
+              마이갤러리
+            </div>
 
-        {/* Title */}
-        <div className="text-start text-white mb-4 title-24 md:title-40-1 lg:title-46-1">
-          나의 포토카드 판매하기
-        </div>
+            {/* Title */}
+            <div className="text-start text-white mb-4 title-24 md:title-40-1 lg:title-46-1">
+              나의 포토카드 판매하기
+            </div>
 
-        {/* md 이상일 때만 보이는 구분선 */}
-        <div className="hidden md:block w-full h-[2px] bg-gray-200 mb-4" />
+            {/* md 이상일 때만 보이는 구분선 */}
+            <div className="hidden md:block w-full h-[2px] bg-gray-200 mb-4" />
 
-        {/* 검색 + 필터 영역 */}
-        {/* 모바일 전용 */}
-        <div className="flex gap-2 mb-4 md:hidden">
-          <div>
-            <FilterDropdown iconSize={45} />
-          </div>
-          <Search />
-        </div>
+            {/* 카드 리스트 */}
+            <div
+              className={`grid grid-cols-2 gap-4 ${
+                isDesktop ? "overflow-y-auto" : "overflow-y-auto h-[75%]"
+              } pb-10 flex-1`}
+            >
+              {isLoading ? (
+                <div className="text-white">잠시만 기다려주세요</div>
+              ) : (
+                data?.items?.map((card) => {
+                  const representativeUserCard = card.userCards[0];
 
-        {/* md 이상 전용 */}
-        <div className="hidden md:flex gap-6 items-center mb-4 md:mb-10">
-          <div>
-            <Search />
-          </div>
-          <FilterDropdown />
-        </div>
-
-        {/* 카드 리스트 */}
-        <div
-          className={`grid grid-cols-2 gap-4 ${
-            isDesktop ? "overflow-y-auto" : "overflow-y-auto h-[75%]"
-          } pb-10 flex-1`}
-        >
-          {Array.from({ length: 10 }).map((_, idx) => (
-            <BaseCard
-              key={idx}
-              title="우리집 앞마당"
-              grade="COMMON"
-              category="풍경"
-              owner="미쓰손"
-              price="4"
-              amount="1"
-              amountLabel="수량"
-              isFavorite
-            />
-          ))}
-        </div>
+                  return (
+                    <div
+                      key={card.id}
+                      onClick={() => {
+                        setSelectedCard({
+                          photoCard: card,
+                          userCard: representativeUserCard,
+                        });
+                        setShowDetail(true);
+                      }}
+                    >
+                      <MyCard
+                        name={card.name}
+                        image={card.imageUrl}
+                        gradeId={card.grade?.id}
+                        genre={card.genre?.name}
+                        nickname={
+                          representativeUserCard?.owner?.nickname || "Unknown"
+                        }
+                        totalQuantity={card.userCards?.length}
+                        initialPrice={representativeUserCard?.price}
+                      />
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

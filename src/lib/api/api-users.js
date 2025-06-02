@@ -1,26 +1,77 @@
-import { baseUrl } from "./fetch-client";
+import { cookieFetch } from "./fetch-client";
 
 // 장르 + 등급 get
 export async function getCardMeta() {
-  const res = await fetch(`${baseUrl}/users/card-meta`);
-
-  if (!res.ok) {
-    throw new Error("장르, 등급 불러오기 실패");
-  }
-
-  return res.json();
+  return await cookieFetch("/api/users/card-meta");
 }
 
-// POST
-export async function postCard(formData) {
-  const res = await fetch(`${baseUrl}/users/post`, {
+// 월별 생성 횟수 get
+export async function getMonthlyCardCount() {
+  return await cookieFetch("/api/users/monthly-post-count");
+}
+
+// 카드 생성
+export async function postCard(data) {
+  return await cookieFetch("/api/users/post", {
     method: "POST",
-    body: formData,
+    body: data,
   });
+}
 
-  if (!res.ok) {
-    throw new Error("POST 실패");
-  }
+export const userService = {
+  getMe: () => cookieFetch("/api/users"),
+};
 
-  return res.json();
+// GET: 마이 갤러리
+export async function getMyCards({
+  grade,
+  genre,
+  keyword,
+  page = 1,
+  size = "md",
+}) {
+  const queryParams = new URLSearchParams();
+
+  if (grade && grade !== 0) queryParams.append("grade", grade.toString());
+  if (genre && genre !== 0) queryParams.append("genre", genre.toString());
+  if (keyword) queryParams.append("keyword", keyword);
+  if (page) queryParams.append("page", page.toString() || "1");
+  if (size) queryParams.append("size", size || "md");
+  queryParams.append("withCounts", "true");
+
+  const queryString = queryParams.toString();
+  return await cookieFetch(
+    `/api/users/gallery${queryString && `?${queryString}`}`
+  );
+}
+
+// GET: 나의 판매 포토카드
+export async function getMyCardsOnSale({
+  grade,
+  genre,
+  keyword,
+  saleType, // 판매, 교환 (품절x)
+  sale, // '판매 중', '판매 완료' (교환x)
+  page = 1,
+  size = "md",
+}) {
+  const queryParams = new URLSearchParams();
+
+  if (grade && grade !== 0) queryParams.append("grade", grade.toString());
+  if (genre && genre !== 0) queryParams.append("genre", genre.toString());
+  if (keyword) queryParams.append("keyword", keyword);
+  if (saleType) queryParams.append("saleType", saleType);
+  if (sale) queryParams.append("sale", sale);
+  if (page) queryParams.append("page", page.toString() || "1");
+  if (size) queryParams.append("size", size || "md");
+  queryParams.append("withCounts", "true"); // 우주: 필터 카운트 포함 요청
+  const queryString = queryParams.toString();
+  return await cookieFetch(
+    `/api/users/cards-on-sale${queryString && `?${queryString}`}`
+  );
+}
+
+// GET: 카드 개수
+export async function getCardsCount() {
+  return await cookieFetch("/api/users/cards-count");
 }

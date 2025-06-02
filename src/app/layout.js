@@ -13,10 +13,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className="w-full">
-        <Header />
-        <main className="pb-20  md:pb-0 pt-[60px] md:pt-[70px] lg:pt-20">
-          <Providers>{children}</Providers>
-        </main>
+        <div className="mx-auto min-h-screen px-4 md:px-5 max-w-[1480px]">
+          <Providers>
+            <Header />
+            <main className="pb-20 md:pb-0">{children}</main>
+          </Providers>
+        </div>
       </body>
     </html>
   );

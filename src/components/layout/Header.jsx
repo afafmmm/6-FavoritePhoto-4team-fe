@@ -1,192 +1,200 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import mainLogoImg from "@/assets/main-logo.png";
+import humbergerIconImg from "@/assets/icon-humberger.png";
 import CurtainMenu from "./CurtainMenu";
 import DropdownNavi from "./DropdownNavi";
-import Notification from "./Notification";
-import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
-
-// 임시 로그인 상태 (실제 구현시 props/context/hook 등으로 대체 필요)
-const isLoggedIn = true; // true로 바꾸면 로그인 상태 테스트 가능
-const user = {
-  id: 101,
-  point: 1540,
-  nickname: "유디",
-};
+import Image from "next/image";
+import { useAuth } from "@/providers/AuthProvider";
+import Notification from "./Notification";
+import { getSocket, disconnectSocket } from "@/lib/socket";
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showBackHeader, setShowBackHeader] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  const { user, logout, isLoading } = useAuth();
+  const [point, setPoint] = useState(null);
+  const [pointLoading, setPointLoading] = useState(false);
+  const [pointError, setPointError] = useState("");
+  const [isCurtainOpen, setIsCurtainOpen] = useState(false); // 커튼 메뉴 상태 추가
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 닉네임 드롭다운 상태
 
-  // 모바일에서 뒤로가기/페이지이름을 보여줄 경로 목록
-  const mobileBackPages = [
-    "/notification",
-    // 필요시 추가
-  ];
-  // 각 경로별 페이지 이름 매핑
-  const pageNames = {
-    "/notification": "알림",
-    // 필요시 추가
+  // 토큰 가져오기 (쿠키에서)
+  const getToken = () => {
+    if (typeof document !== "undefined") {
+      const match = document.cookie.match(/(?:^|; )accessToken=([^;]*)/);
+      return match ? decodeURIComponent(match[1]) : null;
+    }
+    return null;
   };
 
-  // 모바일에서 뒤로가기 헤더를 보여줄지 결정
-  React.useEffect(() => {
-    setShowBackHeader(mobileBackPages.includes(pathname));
-  }, [pathname]);
+  const fetchMyPoints = async () => {
+    if (!user) return;
+    setPointError("");
+    try {
+      const res = await fetch(
+        "https://six-favoritephoto-4team-be.onrender.com/api/points/me",
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      );
+      if (!res.ok) throw new Error("포인트 정보를 불러오지 못했습니다.");
+      const data = await res.json();
+      setPoint(data.points);
+    } catch (e) {
+      setPointError(e.message);
+    }
+  };
 
-  // 모바일에서 뒤로가기/페이지이름 노출 여부
-  const isMobileBackPage = mobileBackPages.includes(pathname);
-  const pageTitle = pageNames[pathname] || "";
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // 필요하면 리다이렉트 또는 상태 업데이트
+    } catch (err) {
+      console.error("로그아웃 중 오류 발생:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+    }
+  }, [pathname, isLoading, user]);
+
+  useEffect(() => {
+    if (!user) return;
+    let socket;
+    let reconnectTimeout;
+
+    const connectSocket = () => {
+      const token = getToken();
+      if (!token) return;
+      socket = getSocket(
+        token,
+        "https://six-favoritephoto-4team-be.onrender.com"
+      );
+      socket.on("connect", () => {
+        console.log("[Socket] Connected", socket.id);
+        if (user.id) {
+          socket.emit("join", user.id);
+          console.log("[Socket] join room:", user.id);
+        }
+      });
+      socket.on("connect_error", (err) => {
+        console.error("[Socket] Connection error:", err);
+      });
+      socket.on("disconnect", (reason) => {
+        console.log("[Socket] Disconnected:", reason);
+        // 페이지 이동 등으로 소켓이 끊기면 1초 후 재연결
+        reconnectTimeout = setTimeout(() => {
+          connectSocket();
+        }, 1000);
+      });
+      // 서버에서 'pointUpdate' 전달
+      const handlePointUpdate = (data) => {
+        console.log("[Socket] pointUpdate event received:", data);
+        if (data && typeof data.totalPoints === "number") {
+          setPoint(data.totalPoints);
+        }
+      };
+      socket.on("pointUpdate", handlePointUpdate);
+    };
+
+    connectSocket();
+    fetchMyPoints();
+
+    return () => {
+      if (socket) {
+        socket.off("pointUpdate");
+        socket.off("disconnect");
+        socket.off("connect");
+        socket.off("connect_error");
+        disconnectSocket();
+      }
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    };
+  }, [user, pathname]);
 
   return (
-    <header>
-      <nav className={"w-full bg-my-black top-0 z-50 fixed"}>
-        <div
-          className={`${
-            pathname === "/"
-              ? "max-w-[1920px] mx-auto h-[60px] md:h-[70px] lg:h-20 lg:py-[27px] lg:px-[60px] flex items-center justify-between px-5 py-[19px] md:py-[25px] md:px-10 lg:pt-[27px] lg:pb-[27.8px]"
-              : "max-w-[1480px] mx-auto h-[60px] md:h-[70px] lg:h-20 lg:py-[27px] lg:px-5 md:px-10 flex items-center justify-between px-5 py-3 md:py-[23px]"
-          }`}
-        >
-          {/* 왼쪽: 햄버거 메뉴 또는 뒤로가기 (showBackHeader가 true면 모든 해상도에서 뒤로가기, 아니면 기존대로) */}
-          <div
-            className={`flex items-center min-w-[44px] justify-start${
-              showBackHeader ? "" : " md:hidden"
-            }`}
+    <header className="sticky top-0 left-0 z-[7777] bg-my-black">
+      <nav
+        className={`
+          flex items-center 
+          max-w-[1480px] h-[60px] md:h-[70px] lg:h-[80px]
+          ${pathname && pathname === "/" ? "mx-auto px-4 md:px-9 lg:px-0" : ""}
+      `}
+      >
+        <div className="w-full relative md:static flex items-center justify-between">
+          <button className="md:hidden" onClick={() => setIsCurtainOpen(true)}>
+            <Image src={humbergerIconImg} alt="hamburger" />
+          </button>
+
+          <Link
+            href={"/"}
+            className="absolute md:static left-1/2 md:left-0 -translate-x-1/2 md:-translate-0 "
           >
-            {showBackHeader ? (
-              <button
-                type="button"
-                onClick={() => router.back()}
-                aria-label="뒤로가기"
-                className="ml-5"
-              >
-                <Image
-                  src={require("@/assets/icon_back.svg")}
-                  alt="뒤로가기"
-                  width={22}
-                  height={22}
-                  className="w-[22px] h-[22px]"
-                  priority
-                />
-              </button>
-            ) : (
-              <button type="button" onClick={() => setMenuOpen(true)}>
-                <Image
-                  src={require("@/assets/icon_menu.svg")}
-                  alt="메뉴"
-                  width={22}
-                  height={22}
-                  className="w-[22px] h-[22px]"
-                  priority
-                />
-              </button>
-            )}
-          </div>
-          {/* 가운데: 로고 또는 페이지 이름 */}
-          <div className="flex items-center justify-center flex-1 md:justify-start md:flex-none">
-            {showBackHeader ? (
-              <span
-                className="text-white"
-                style={{
-                  fontFamily: "BRB, baskin, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "20px",
-                  letterSpacing: 0,
-                  lineHeight: "normal",
-                }}
-              >
-                {pageTitle}
+            <Image
+              src={mainLogoImg}
+              alt="main-logo"
+              className="w-20 md:w-28 lg:w-[138px] h-4 md:h-5 lg:h-[26px]"
+            />
+          </Link>
+
+          {isLoading ? (
+            <span className="text-gray-400">확인 중...</span>
+          ) : user ? (
+            <div className="flex items-center gap-7 ">
+              {/* User정보가 있는 경우 */}
+              <span className="hidden md:block text-700-14 text-gray-200">
+                {pointLoading
+                  ? "포인트..."
+                  : pointError
+                  ? "-"
+                  : point !== null
+                  ? `${point} P`
+                  : "-"}
               </span>
-            ) : (
-              <Link href="/">
-                <Image
-                  src={require("@/assets/logo.svg")}
-                  alt="최애의포토"
-                  width={139}
-                  height={25}
-                  className="w-[83.37px] h-[15.12px] md:w-[111px] md:h-[20px] lg:w-[138.94px] lg:h-[25.2px]"
-                  priority
+              <Notification />
+              <span
+                className="hidden md:block text-700-14 text-gray-200 cursor-pointer relative"
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+              >
+                {user.nickname}
+                <DropdownNavi
+                  user={{ ...user, point: point ?? 0 }}
+                  open={isDropdownOpen}
+                  onClose={() => setIsDropdownOpen(false)}
                 />
+              </span>
+              <span className="hidden md:block w-[1px] h-4 bg-gray-400"></span>
+              <button
+                onClick={handleLogout}
+                className="hidden md:block text-400-14 text-gray-400"
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <div className="[&>a]:text-gray-200 flex items-center gap-7">
+              {/* User정보가 없는 경우 */}
+              <Link href={"/login"} className="text-400-14 ">
+                로그인
               </Link>
-            )}
-          </div>
-          {/* 오른쪽: 알림/로그인 (sm에서만 보임) */}
-          <div className="flex items-center justify-end md:hidden min-w-[44px]">
-            {!showBackHeader && (
-              <>
-                {isLoggedIn && <Notification userId={user.id} />}
-                {!isLoggedIn && (
-                  <Link
-                    href="/login"
-                    className="text-400-14 text-white hover:text-gray-400"
-                  >
-                    로그인
-                  </Link>
-                )}
-              </>
-            )}
-            {/* 뒤로가기 헤더일 때 오른쪽 공간 맞추기용 투명 div */}
-            {showBackHeader && <div style={{ width: 22, height: 22 }} />}
-          </div>
-          {/* 데스크탑 네비게이션: md 이상에서만 보임 */}
-          <div className="hidden md:flex flex-1 justify-end items-center">
-            {isLoggedIn ? (
-              <ul className="flex items-center space-x-[30px] text-gray-200 text-[14px]">
-                <li className="text-700-14 text-gray-200">
-                  {user.point.toLocaleString()} P
-                </li>
-                {/* 알림: 포인트와 닉네임 사이, 로그인 시 항상 보임 */}
-                <Notification userId={user.id} />
-                <li className="relative">
-                  <button
-                    className="title-18 text-gray-200 focus:outline-none"
-                    onClick={() => setDropdownOpen((prev) => !prev)}
-                    style={{ marginBottom: 0, paddingBottom: 0 }}
-                  >
-                    {user.nickname}
-                  </button>
-                  <DropdownNavi
-                    user={user}
-                    open={dropdownOpen}
-                    onClose={() => setDropdownOpen(false)}
-                  />
-                </li>
-                <li>
-                  <Link
-                    href="/logout"
-                    className="border-l pl-[30px] text-gray-400 border-gray-400 hover:text-gray-400 h-4 flex items-center"
-                    style={{ alignSelf: "center" }}
-                  >
-                    로그아웃
-                  </Link>
-                </li>
-              </ul>
-            ) : (
-              <ul className="flex space-x-6 text-gray-200 text-[14px]">
-                <li>
-                  <Link href="/login" className="hover:text-gray-400">
-                    로그인
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/signup" className="hover:text-gray-400">
-                    회원가입
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </div>
+              <Link href={"/signup"} className="hidden md:flex md:text-400-14 ">
+                회원가입
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
-      {/* 커튼 메뉴 오버레이 */}
-      {menuOpen && (
-        <CurtainMenu user={user} onClose={() => setMenuOpen(false)} />
+      {isCurtainOpen && user && (
+        <CurtainMenu
+          user={{ ...user, point: point ?? 0 }}
+          onClose={() => setIsCurtainOpen(false)}
+        />
       )}
     </header>
   );

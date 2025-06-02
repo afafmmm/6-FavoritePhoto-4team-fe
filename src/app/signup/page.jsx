@@ -1,135 +1,95 @@
+// /home/jisu/6-FavoritePhoto-4team-fe/src/app/signup/page.jsx
 "use client";
 
 import InputField from "@/components/ui/InputField";
 import PasswordField from "@/components/ui/PasswordField";
-import Search from "@/components/ui/Search";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import mainLogoImg from "@/assets/main-logo.png";
+import loadingGif from "@/assets/loading.gif";
+import { useSignupForm } from "@/hooks/useSignupForm"; // 커스텀 훅 임포트
+import GoogleAuthButton from "@/components/ui/GoogleAuthButton";
 
-export default function ExampleFormPage() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState("");
-
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  // Search
-  const [keyword, setKeyword] = useState("");
-
-  // Search 간단 예시
-  useEffect(() => {
-    // fetch 데이터 연결해서 하기(아래는 예시입니다.)
-    // const { data } = await getArticles(keyword ? { word: keyword } : {});
-  }, [keyword]);
-
-  const MAX_NAME_LENGTH = 30;
-
-  // 이메일 유효성 검사
-  const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return "이메일을 입력해 주세요.";
-    if (!emailRegex.test(value)) return "이메일 형식이 아닙니다.";
-    return "";
-  };
-
-  // 핸들러
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-    setEmailError(validateEmail(value));
-  };
-
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    setName(value);
-    if (value.length > MAX_NAME_LENGTH) {
-      setNameError(
-        `포토카드 이름은 최대 ${MAX_NAME_LENGTH}자까지 입력 가능합니다.`
-      );
-    } else {
-      setNameError("");
-    }
-  };
-
-  // 비밀번호 부분은 회원가입을 기준으로 구현했습니다
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (!value) {
-      setPasswordError("비밀번호를 입력해 주세요");
-    } else if (value.length < 8) {
-      setPasswordError("8자 이상 입력해 주세요");
-    } else {
-      setPasswordError("");
-    }
-
-    // 비밀번호 확인까지 작성했다가 또 다시 비밀번호를 바꿀 경우, 즉시 에러
-    if (confirmPassword && value !== confirmPassword) {
-      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setConfirmPasswordError("");
-    }
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-
-    if (value !== password) {
-      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setConfirmPasswordError("");
-    }
-  };
+export default function SignupPage() {
+  const { form, writeError, isPending, handleChange, handleSubmit } =
+    useSignupForm();
 
   return (
-    <div className="min-h-screen p-6 space-y-6">
-      <InputField
-        label="이메일"
-        placeholder="이메일을 입력해 주세요"
-        type="email"
-        name="email"
-        value={email}
-        onChange={handleEmailChange}
-        labelClassName="text-sm font-medium"
-        error={emailError}
-      />
+    <div className="fixed left-0 top-0 px-4 md:px-0 w-full h-full overflow-y-auto bg-my-black z-[8888]">
+      <div className="w-full max-w-[345px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:max-w-[440px] lg:max-w-[520px]">
+        <h2 className="flex justify-center mt-20 md:mt-0 lg:mt-0">
+          <Link href={"/"} className="">
+            <Image
+              src={mainLogoImg}
+              alt="main-logo"
+              className="w-44 h-8"
+            />
+          </Link>
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          className="mt-[60px] mb-8 flex flex-col gap-8 md:w-full"
+        >
+          <InputField
+            label="이메일"
+            placeholder="이메일을 입력해 주세요"
+            type="email"
+            name="userEmail"
+            value={form.userEmail || ""}
+            onChange={handleChange}
+            labelClassName="text-sm font-medium"
+            error={writeError.userEmail || ""}
+          />
+          <InputField
+            label="닉네임"
+            placeholder="닉네임을 입력해 주세요"
+            type="text"
+            name="userNickname"
+            value={form.userNickname || ""}
+            onChange={handleChange}
+            labelClassName="text-sm font-medium"
+            error={writeError.userNickname || ""}
+          />
+          <PasswordField
+            label="비밀번호"
+            placeholder="비밀번호 (8자 이상)"
+            name="userPassword"
+            value={form.userPassword || ""}
+            onChange={handleChange}
+            error={writeError.userPassword || ""}
+          />
+          <PasswordField
+            label="비밀번호 확인"
+            placeholder="비밀번호를 한번 더 입력해 주세요"
+            name="userPasswordConfirmation"
+            value={form.userPasswordConfirmation || ""}
+            onChange={handleChange}
+            error={writeError.userPasswordConfirmation || ""}
+          />
 
-      <InputField
-        label="포토카드 이름"
-        placeholder="포토카드 이름을 입력해 주세요"
-        name="photocardName"
-        value={name}
-        onChange={handleNameChange}
-        labelClassName="text-base font-bold"
-        error={nameError}
-      />
+          <div className="flex flex-col gap-4">
+            <button
+              type="submit"
+              disabled={isPending}
+              className="flex items-center justify-center gap-2 w-full h-[55px] lg:h-[60px] text-700-16 rounded-xs bg-main text-my-black disabled:!cursor-not-allowed disabled:bg-[#bfc802]"
+            >
+              {isPending ? "회원가입 요청 중..." : "가입하기"}
+              {isPending && (
+                <Image src={loadingGif} alt="로딩중" width={20} height={20} />
+              )}
+            </button>
 
-      <PasswordField
-        label="비밀번호"
-        placeholder="8자 이상 입력해 주세요"
-        name="password"
-        value={password}
-        onChange={handlePasswordChange}
-        error={passwordError}
-      />
+            <GoogleAuthButton buttonText="Google로 시작하기" />
+          </div>
 
-      <PasswordField
-        label="비밀번호 확인"
-        placeholder="비밀번호를 한번 더 입력해 주세요"
-        name="confirmPassword"
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        error={confirmPasswordError}
-      />
-
-      <Search onSearch={setKeyword} />
+          <div className="flex items-center justify-center gap-2 text-400-14 lg:text-400-16">
+            <span>이미 최애의 포토 회원이신가요?</span>
+            <Link href={"/login"}>
+              <span className="text-main underline">로그인하기</span>
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

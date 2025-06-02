@@ -15,9 +15,10 @@ function InputField({
   return (
     <div className="w-full flex flex-col gap-2">
       {label && (
-        <label className={`text-white ${labelClassName}`}>{label}</label>
+        <label htmlFor={name} className={`text-white ${labelClassName} text-400-16`}>{label}</label>
       )}
       <input
+        id={name}
         type={type}
         name={name}
         value={value}
