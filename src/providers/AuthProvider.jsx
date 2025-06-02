@@ -1,7 +1,7 @@
 "use client";
 
 import { authService } from "@/lib/api/api-auth.js";
-import { userService } from "@/lib/api/api-users.js";
+import { getMe } from "@/lib/api/api-users.js";
 import {
   createContext,
   useContext,
@@ -33,7 +33,7 @@ export default function AuthProvider({ children }) {
   const getUser = useCallback(async () => {
     setIsLoading(true);
     try {
-      const currentUser = await userService.getMe();
+      const currentUser = await getMe();
       setUser(currentUser);
     } catch (error) {
       setUser(null);
